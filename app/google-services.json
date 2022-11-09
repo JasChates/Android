@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1013518806499",
+    "project_id": "jaschates",
+    "storage_bucket": "jaschates.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013518806499:android:1c2ca58d35b585dc37c4d6",
+        "android_client_info": {
+          "package_name": "com.example.jaschates"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013518806499-6r36nqdceiidvp43dabud175enr0cpn4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz9jkWGX3WepyiA6VMZoowWwi6xRUYMr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013518806499-6r36nqdceiidvp43dabud175enr0cpn4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
