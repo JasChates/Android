@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.example.jaschates'
-    compileSdk 32
+    compileSdk 33
 
     task wrapper(type: Wrapper) {
         gradleVersion = '7.0'
@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId "com.example.jaschates"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
