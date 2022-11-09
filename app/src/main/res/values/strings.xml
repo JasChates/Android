@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">JasChates</string>
+    <string name="login">구글 로그인</string>
+    <string name="userinfo">UserEmail</string>
 </resources>
