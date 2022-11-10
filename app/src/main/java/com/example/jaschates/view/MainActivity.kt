@@ -1,7 +1,8 @@
-package com.example.jaschates
+package com.example.jaschates.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.jaschates.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
