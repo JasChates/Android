@@ -1,15 +1,17 @@
-package com.example.jaschates
+package com.example.jaschates.view
 
-import android.Manifest.permission.CAMERA
-import android.Manifest.permission_group.CAMERA
 import android.content.Intent
-import android.hardware.SensorPrivacyManager.Sensors.CAMERA
-import android.media.MediaRecorder.VideoSource.CAMERA
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
+import com.example.jaschates.R
+import com.example.jaschates.data.UserDTO
 import com.example.jaschates.databinding.ActivityLoginBinding
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -23,11 +25,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
     var googleSigninInClient: GoogleSignInClient? = null
-    var GoogleLoginCode = 0
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
+        auth = FirebaseAuth.getInstance()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -37,27 +40,34 @@ class LoginActivity : AppCompatActivity() {
 
         binding.googleLoginBtn.setOnClickListener {
             val int = googleSigninInClient?.signInIntent
-            startActivityForResult(int, GoogleLoginCode)
+            startForResult.launch(int)
+//            startActivityForResult(int, GoogleLoginCode)
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val intent = result.data
+            val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account)
+            } catch (e: Exception) {
 
-        if (requestCode == GoogleLoginCode) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
-            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-
-            FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        saveUserDataToDatabase(task.result!!.user)
-                    }
-                }
+            }
         }
+    }
 
+    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        auth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                startActivity(Intent(this, UserListActivity::class.java))
+                Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     fun saveUserDataToDatabase(user: FirebaseUser?) {
