@@ -1,13 +1,9 @@
 package com.example.jaschates
 
-import android.Manifest.permission.CAMERA
-import android.Manifest.permission_group.CAMERA
 import android.content.Intent
-import android.hardware.SensorPrivacyManager.Sensors.CAMERA
-import android.media.MediaRecorder.VideoSource.CAMERA
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.jaschates.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -47,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (requestCode == GoogleLoginCode) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            Log.d("TAG", "onActivityResult: $task")
             val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
