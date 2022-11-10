@@ -2,4 +2,6 @@
     <string name="app_name">JasChates</string>
     <string name="login">구글 로그인</string>
     <string name="userinfo">UserEmail</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
