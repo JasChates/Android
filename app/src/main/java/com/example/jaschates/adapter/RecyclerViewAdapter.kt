@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jaschates.R
 import com.example.jaschates.data.UserDTO
 import com.example.jaschates.view.UserListActivity
+
 import com.example.jaschates.view.VideoCallActivity
 
 class RecyclerViewAdapter(
