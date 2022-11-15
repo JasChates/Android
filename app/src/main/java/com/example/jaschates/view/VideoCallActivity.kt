@@ -33,10 +33,10 @@ class VideoCallActivity : AppCompatActivity() {
             .build()
         val channelId = intent.getStringExtra("channelId")
         remonCall?.connect(channelId)
-        remonCall?.onClose {
-            // 상대방이 화상통화를 종료할 경우
-            finish()
-        }
+//        remonCall?.onClose {
+//            // 상대방이 화상통화를 종료할 경우
+//            finish()
+//        }
     }
 
     override fun onDestroy() {
