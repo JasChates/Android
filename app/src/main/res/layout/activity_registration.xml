@@ -8,7 +8,6 @@
         android:layout_height="match_parent"
         android:background="@drawable/ic_background">
 
-
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="200dp"
@@ -34,27 +33,34 @@
                 android:layout_marginBottom="228dp"
                 android:src="@drawable/email"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/et_registration_id"
+                app:layout_constraintEnd_toStartOf="@+id/et_registration_id_layout"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/et_registration_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_registration_id_layout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="50dp"
-                android:fontFamily="@font/dalseohealingbold"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="8dp"
-                android:textColor="#000000"
-                android:textColorHint="#888888"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/et_registration_password"
+                app:layout_constraintBottom_toTopOf="@+id/et_registration_password_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/registration_iv" />
+                app:layout_constraintTop_toBottomOf="@+id/registration_iv">
+
+                <EditText
+                    android:id="@+id/et_registration_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dalseohealingbold"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="8dp"
+                    android:background="@color/white"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:textSize="30sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/registration_iv"
@@ -72,26 +78,36 @@
                 android:layout_marginBottom="172dp"
                 android:src="@drawable/password"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/et_registration_password"
+                app:layout_constraintEnd_toStartOf="@+id/et_registration_password_layout"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/et_registration_password"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_registration_password_layout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
-                android:fontFamily="@font/dalseohealingbold"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:paddingLeft="8dp"
-                android:textColor="#000000"
-                android:textColorHint="#888888"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/et_registration_name"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@null"
+                app:passwordToggleDrawable="@drawable/text_visible_icon"
+                app:layout_constraintBottom_toTopOf="@+id/et_registration_name_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_registration_id" />
+                app:layout_constraintTop_toBottomOf="@+id/et_registration_id_layout">
+
+                <EditText
+                    android:id="@+id/et_registration_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dalseohealingbold"
+                    android:hint="Password"
+                    android:background="@color/white"
+                    android:inputType="textPassword"
+                    android:paddingLeft="8dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:textSize="30sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btn_registration"
@@ -110,7 +126,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_registration_name" />
+                app:layout_constraintTop_toBottomOf="@+id/et_registration_name_layout" />
 
             <ImageView
                 android:layout_width="40dp"
@@ -118,25 +134,33 @@
                 android:layout_marginBottom="115dp"
                 android:src="@drawable/name"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/et_registration_name"
+                app:layout_constraintEnd_toStartOf="@+id/et_registration_name_layout"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/et_registration_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_registration_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
-                android:fontFamily="@font/dalseohealingbold"
-                android:hint="Name"
-                android:paddingLeft="8dp"
-                android:textColor="#000000"
-                android:textColorHint="#888888"
-                android:textSize="30sp"
                 app:layout_constraintBottom_toTopOf="@+id/btn_registration"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_registration_password" />
+                app:layout_constraintTop_toBottomOf="@+id/et_registration_password_layout">
+
+                <EditText
+                    android:id="@+id/et_registration_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dalseohealingbold"
+                    android:hint="Name"
+                    android:background="@color/white"
+                    android:paddingLeft="8dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:textSize="30sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

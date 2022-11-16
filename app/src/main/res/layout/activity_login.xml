@@ -14,14 +14,15 @@
             android:id="@+id/imageView"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginTop="70dp"
             android:adjustViewBounds="true"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_jaschates" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="350dp"
             android:background="@color/white"
@@ -35,27 +36,33 @@
                 android:layout_marginBottom="250dp"
                 android:src="@drawable/email"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/et_login_id"
+                app:layout_constraintEnd_toStartOf="@+id/et_login_id_layout"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/et_login_id"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_login_id_layout"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="50dp"
-                android:fontFamily="@font/dalseohealingbold"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="8dp"
-                android:textColor="#000000"
-                android:textColorHint="#888888"
-                android:textSize="28sp"
-                app:layout_constraintBottom_toTopOf="@+id/et_login_password"
+                app:layout_constraintBottom_toTopOf="@+id/et_login_password_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/et_login_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/dalseohealingbold"
+                    android:hint="Email"
+                    android:background="@color/white"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:textSize="28sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:layout_width="40dp"
@@ -63,27 +70,40 @@
                 android:layout_marginBottom="190dp"
                 android:src="@drawable/password"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/et_login_id"
+                app:layout_constraintEnd_toStartOf="@+id/et_login_id_layout"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <EditText
-                android:id="@+id/et_login_password"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_login_password_layout"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
                 android:layout_marginBottom="16dp"
-                android:fontFamily="@font/dalseohealingbold"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:paddingLeft="8dp"
-                android:textColor="#000000"
-                android:textColorHint="#888888"
-                android:textSize="28sp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@null"
+                app:passwordToggleDrawable="@drawable/text_visible_icon"
                 app:layout_constraintBottom_toTopOf="@+id/profile_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_login_id" />
+                app:layout_constraintTop_toBottomOf="@+id/et_login_id_layout">
+
+                <EditText
+                    android:id="@+id/et_login_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/dalseohealingbold"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:background="@color/white"
+                    android:textSize="28sp"
+                    app:layout_constraintBottom_toTopOf="@+id/profile_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_login_id" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/profile_button"
@@ -101,7 +121,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/btn_registration"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+                app:layout_constraintTop_toBottomOf="@+id/et_login_password_layout" />
 
             <Button
                 android:id="@+id/btn_registration"
