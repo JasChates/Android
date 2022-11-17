@@ -61,7 +61,7 @@
                     android:inputType="textEmailAddress"
                     android:textColor="#000000"
                     android:textColorHint="#888888"
-                    android:textSize="28sp" />
+                    android:textSize="24sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
@@ -98,7 +98,7 @@
                     android:textColor="#000000"
                     android:textColorHint="#888888"
                     android:background="@color/white"
-                    android:textSize="28sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/profile_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
