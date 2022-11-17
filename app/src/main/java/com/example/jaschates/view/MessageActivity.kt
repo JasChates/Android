@@ -1,6 +1,7 @@
 package com.example.jaschates.view
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -58,30 +60,50 @@ class MessageActivity : AppCompatActivity() {
         imageView.setOnClickListener {
             Log.d("클릭 시 dest", "$destinationUid")
             val chatModel = ChatModel()
-            chatModel.users.put(uid.toString(), true)
-            chatModel.users.put(destinationUid!!, true)
+            chatModel.users[uid.toString()] = true
+            chatModel.users[destinationUid!!] = true
 
             val comment = ChatModel.Comment(uid, editText.text.toString(), curTime)
-            if(chatRoomUid == null){
-                imageView.isEnabled = false
-                fireDatabase.child("chatrooms").push().setValue(chatModel).addOnSuccessListener {
-                    //채팅방 생성
-                    checkChatRoom()
-                    //메세지 보내기
-                    Handler().postDelayed({
-                        println(chatRoomUid)
-                        fireDatabase.child("chatrooms").child(chatRoomUid.toString()).child("comments").push().setValue(comment)
-                        messageActivity_editText.text = null
-                    }, 1000L)
-                    Log.d("chatUidNull dest", "$destinationUid")
+            if (messageActivity_editText.text.isNotEmpty()) {
+                if(chatRoomUid == null){
+                    imageView.isEnabled = false
+                    fireDatabase.child("chatrooms").push().setValue(chatModel).addOnSuccessListener {
+                        //채팅방 생성
+                        checkChatRoom()
+                        //메세지 보내기
+                        Handler().postDelayed({
+                            fireDatabase.child("chatrooms").child(chatRoomUid.toString()).child("comments").push().setValue(comment)
+                            messageActivity_editText.text = null
+                        }, 1000L)
+                        Log.d("chatUidNull dest", "$destinationUid")
+                    }
+                }else{
+                    fireDatabase.child("chatrooms").child(chatRoomUid.toString()).child("comments").push().setValue(comment)
+                    messageActivity_editText.text = null
+                    Log.d("chatUidNotNull dest", "$destinationUid")
                 }
-            }else{
-                fireDatabase.child("chatrooms").child(chatRoomUid.toString()).child("comments").push().setValue(comment)
-                messageActivity_editText.text = null
-                Log.d("chatUidNotNull dest", "$destinationUid")
-            }
+            } else Log.d("TAG", "onCreate: messageActivity_editText lenght is 0")
         }
         checkChatRoom()
+
+        call_image.setOnClickListener {
+            val channelNumber = (1000..1000000).random().toString()
+
+            showJoinDialog(channelNumber)
+        }
+    }
+
+    fun showJoinDialog(channel: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("${channel} 방에 참여하시겠습니까?")
+        builder.setPositiveButton("Yes") { dialogInterface, i ->
+            startActivity(Intent(this, VideoCallActivity::class.java)
+                .putExtra("channelId", channel))
+        }
+        builder.setNegativeButton("No") { dialogInterface, i ->
+            dialogInterface.dismiss()
+        }
+        builder.create().show()
     }
 
     private fun checkChatRoom(){
