@@ -1,9 +1,7 @@
 package com.example.jaschates.view
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
