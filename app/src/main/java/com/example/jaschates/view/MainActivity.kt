@@ -8,13 +8,14 @@ import com.example.jaschates.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 private lateinit var homeFragment: HomeFragment
+private lateinit var friendsFragment: FriendsFragment
 private lateinit var chatFragment: ChatFragment
 private lateinit var profileFragment: ProfileFragment
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,23 +26,33 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().add(R.id.fragments_frame, homeFragment).commit()
 
     }
-    private val BottomNavItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener{
-        when(it.itemId){
-            R.id.menu_home -> {
-                homeFragment = HomeFragment.newInstance()
-                supportFragmentManager.beginTransaction().replace(R.id.fragments_frame, homeFragment).commit()
+
+    private val BottomNavItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_home -> {
+                    homeFragment = HomeFragment.newInstance()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragments_frame, homeFragment).commit()
+                }
+                R.id.menu_friends -> {
+                    friendsFragment = FriendsFragment.newInstance()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragments_frame, friendsFragment).commit()
+                }
+                R.id.menu_chat -> {
+                    chatFragment = ChatFragment.newInstance()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragments_frame, chatFragment).commit()
+                }
+                R.id.menu_profile -> {
+                    profileFragment = ProfileFragment.newInstance()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragments_frame, profileFragment).commit()
+                }
             }
-            R.id.menu_chat -> {
-                chatFragment = ChatFragment.newInstance()
-                supportFragmentManager.beginTransaction().replace(R.id.fragments_frame, chatFragment).commit()
-            }
-            R.id.menu_profile -> {
-                profileFragment = ProfileFragment.newInstance()
-                supportFragmentManager.beginTransaction().replace(R.id.fragments_frame, profileFragment).commit()
-            }
+            true
         }
-        true
-    }
 
 
 }
