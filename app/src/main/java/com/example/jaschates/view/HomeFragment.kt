@@ -9,7 +9,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,19 +17,23 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jaschates.R
 import com.example.jaschates.adapter.RandomChatRecyclerAdapter
 import com.example.jaschates.data.ChatRoomModel
+import android.provider.MediaStore
 import com.example.jaschates.databinding.DialogCreateRandomChattingBinding
 import com.example.jaschates.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.dialog_create_random_chatting.*
 
 class HomeFragment : Fragment() {
     companion object{
@@ -67,7 +70,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?)
-    : View {
+            : View {
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
@@ -100,14 +103,14 @@ class HomeFragment : Fragment() {
             chatRoomModel.user["host"] = auth.uid.toString()
             chatRoomModel.user["member"] = ""
             database.child("randomChat").child(auth.uid.toString()).setValue(chatRoomModel).addOnSuccessListener {
-                    // recycler view 생성
-                    createRecyclerView()
+                // recycler view 생성
+                createRecyclerView()
 
 //                    database.child("randomChat").child(auth.uid.toString()).child("comment").push()
-                    dialog.dismiss()
-                    val intent = Intent(context, RandomChatActivity::class.java)
-                    startActivity(intent)
-                }
+                dialog.dismiss()
+                val intent = Intent(context, RandomChatActivity::class.java)
+                startActivity(intent)
+            }
         }
         createRecyclerView()
 
@@ -117,7 +120,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun createRecyclerView() {
-        database.child("randomChat").addListenerForSingleValueEvent(object :ValueEventListener {
+        database.child("randomChat").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val chatRoomModel : ArrayList<ChatRoomModel> = arrayListOf()
                 for (snapshot in snapshot.children){
