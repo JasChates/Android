@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -33,15 +32,15 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/call_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:layout_marginEnd="15dp"
-                android:src="@drawable/call"
-                android:layout_gravity="center"/>
+                android:src="@drawable/call" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -74,12 +73,12 @@
                 android:id="@+id/messageActivity_editText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:fontFamily="@font/dalseohealingbold"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginEnd="55dp"
                 android:layout_marginRight="55dp"
+                android:fontFamily="@font/dalseohealingbold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/messageActivity_ImageView"
                 app:layout_constraintStart_toStartOf="parent"

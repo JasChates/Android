@@ -10,7 +10,7 @@ import com.example.jaschates.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivitySplashBinding
+    lateinit var binding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
