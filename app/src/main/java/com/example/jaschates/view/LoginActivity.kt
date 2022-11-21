@@ -1,6 +1,7 @@
 package com.example.jaschates.view
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -18,7 +19,6 @@ private lateinit var auth: FirebaseAuth
 class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
@@ -27,24 +27,39 @@ class LoginActivity : AppCompatActivity() {
         val email = binding.etLoginId
         val password = binding.etLoginPassword
 
-        val btn_login = binding.profileButton
-
-        btn_login.setOnClickListener {
+        binding.profileButton.setOnClickListener {
             if (email.text.isEmpty() && password.text.isEmpty()) {
                 Toast.makeText(this, "아이디와 비밀번호를 제대로 입력해주세요.", Toast.LENGTH_SHORT).show()
                 Log.d("Email", "$email, $password")
                 email.setText("")
                 password.setText("")
             } else {
+                autoLogin()
                 signIn(email.text.toString(), password.text.toString())
             }
         }
 
         //회원가입창 인텐트
-        val btn_registration = binding.btnRegistration
-        btn_registration.setOnClickListener {
+        binding.btnRegistration.setOnClickListener {
             val intent = Intent(this, RegistrationActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun autoLogin() {
+        // 자동로그인 여부를 정한다.
+        val uid: SharedPreferences? = getSharedPreferences("uid", MODE_PRIVATE)
+        val able: SharedPreferences? = getSharedPreferences("able", MODE_PRIVATE)
+        // shared preferences edit
+        val uidEdit = uid?.edit()
+        val ableEdit = able?.edit()
+
+        if (binding.loginAbleCheck.isChecked) {
+            uidEdit?.putString("uid", auth.uid)?.apply()
+            ableEdit?.putBoolean("able", true)?.apply()
+        } else {
+            uidEdit?.clear()?.apply()
+            ableEdit?.clear()?.apply()
         }
     }
 
@@ -76,15 +91,28 @@ class LoginActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-        moveMainPage(auth?.currentUser)
+        val uid: SharedPreferences? = getSharedPreferences("uid", MODE_PRIVATE)
+        val able: SharedPreferences? = getSharedPreferences("able", MODE_PRIVATE)
+
+        val getUid = uid?.getString("uid", null)
+        val getAble = able?.getBoolean("able", false)
+        if (getUid != null && getAble != false)
+            moveMainPage(currentUser)
+        else {
+            uid?.edit()?.clear()?.apply()
+            able?.edit()?.clear()?.apply()
+        }
         if (currentUser != null) {
             reload();
         }
+        // SharedPreferences 사용
+        // 체크박스가 체크됨 -> true
+        // 안됨 -> false
+        // 로그아웃을 함 -> false
     }
 
-    fun moveMainPage(user: FirebaseUser?){
+    private fun moveMainPage(user: FirebaseUser?){
         if (user != null){
             startActivity(Intent(this, MainActivity::class.java))
             finish()
