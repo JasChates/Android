@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,14 +18,12 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jaschates.R
 import com.example.jaschates.adapter.RandomChatRecyclerAdapter
 import com.example.jaschates.data.ChatRoomModel
-import android.provider.MediaStore
 import com.example.jaschates.databinding.DialogCreateRandomChattingBinding
 import com.example.jaschates.databinding.FragmentHomeBinding
 import com.google.firebase.auth.FirebaseAuth

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import android.provider.MediaStore
+import android.text.Editable
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.jaschates.R
 import com.example.jaschates.data.Friend
+import com.example.jaschates.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -31,6 +33,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.dialog_create_random_chatting.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
@@ -43,16 +46,6 @@ class ProfileFragment : Fragment() {
         fun newInstance(): ProfileFragment {
             return ProfileFragment()
         }
-    }
-
-    //메모리에 올라갔을 때
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    //프레그먼트를 포함하고 있는 액티비티에 붙었을 때
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
     }
 
     private val getContent =
@@ -82,21 +75,16 @@ class ProfileFragment : Fragment() {
             }
         }
 
+    private lateinit var binding: FragmentProfileBinding
     //뷰가 생성되었을 때
     //프레그먼트와 레이아웃을 연결시켜주는 부분
     override fun onCreateView(
-
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         //view 선언을 안하고 return에 바로 적용시키면 glide가 작동을 안함
-        val view = inflater.inflate(R.layout.fragment_profile, container, false)
-        val photo = view?.findViewById<ImageView>(R.id.profile_imageview)
-
-        val email = view?.findViewById<TextView>(R.id.profile_textview_email)
-        val name = view?.findViewById<TextView>(R.id.profile_textview_name)
-        val button = view?.findViewById<Button>(R.id.profile_button)
+        binding = FragmentProfileBinding.inflate(layoutInflater)
 
         //프로필 구현
         fireDatabase.child("users").child(uid).addListenerForSingleValueEvent(object :
@@ -109,30 +97,30 @@ class ProfileFragment : Fragment() {
                 println(userProfile)
                 Glide.with(requireContext()).load(userProfile?.profileImageUrl)
                     .apply(RequestOptions().circleCrop())
-                    .into(photo!!)
-                email?.text = userProfile?.email
-                name?.text = userProfile?.name
+                    .into(binding.profileImageview)
+                binding.profileTextviewEmail.text = userProfile?.email
+                binding.profileTextviewName.setText("${userProfile?.name}")
             }
         })
         //프로필사진 바꾸기
-        photo?.setOnClickListener {
+        binding.profileImageview.setOnClickListener {
             val intentImage = Intent(Intent.ACTION_PICK)
             intentImage.type = MediaStore.Images.Media.CONTENT_TYPE
             getContent.launch(intentImage)
         }
-        button?.setOnClickListener {
-            if (name?.text!!.isNotEmpty()) {
+        binding.profileButton.setOnClickListener {
+            if (binding.profileTextviewName.text!!.isNotEmpty()) {
                 fireDatabase.child("users/$uid/name").setValue(name.text.toString())
-                name.clearFocus()
+                binding.profileTextviewName.clearFocus()
                 Toast.makeText(requireContext(), "이름이 변경되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
         // 로그아웃
-        logout_button?.setOnClickListener {
+        binding.logoutButton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            val intent = Intent(Activity(), LoginActivity::class.java)
+            val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
         }
-        return view
+        return binding.root
     }
 }
