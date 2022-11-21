@@ -32,13 +32,13 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
-    companion object{
-        private var imageUri : Uri? = null
+    companion object {
+        private var imageUri: Uri? = null
         private val fireStorage = FirebaseStorage.getInstance().reference
         private val fireDatabase = FirebaseDatabase.getInstance().reference
         private val user = Firebase.auth.currentUser
         private val uid = user?.uid.toString()
-        fun newInstance() : ProfileFragment {
+        fun newInstance(): ProfileFragment {
             return ProfileFragment()
         }
     }
@@ -52,36 +52,41 @@ class ProfileFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
     }
+
     private val getContent =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if(result.resultCode == AppCompatActivity.RESULT_OK) {
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
                 imageUri = result.data?.data //이미지 경로 원본
                 profile_imageview.setImageURI(imageUri) //이미지 뷰를 바꿈
 
                 //기존 사진을 삭제 후 새로운 사진을 등록
                 fireStorage.child("userImages/$uid/photo").delete().addOnSuccessListener {
-                    fireStorage.child("userImages/$uid/photo").putFile(imageUri!!).addOnSuccessListener {
-                        fireStorage.child("userImages/$uid/photo").downloadUrl.addOnSuccessListener {
-                            val photoUri : Uri = it
-                            println("$photoUri")
-                            fireDatabase.child("users/$uid/profileImageUrl").setValue(photoUri.toString())
-                            Toast.makeText(requireContext(), "프로필사진이 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                    fireStorage.child("userImages/$uid/photo").putFile(imageUri!!)
+                        .addOnSuccessListener {
+                            fireStorage.child("userImages/$uid/photo").downloadUrl.addOnSuccessListener {
+                                val photoUri: Uri = it
+                                println("$photoUri")
+                                fireDatabase.child("users/$uid/profileImageUrl")
+                                    .setValue(photoUri.toString())
+                                Toast.makeText(requireContext(),
+                                    "프로필사진이 변경되었습니다.",
+                                    Toast.LENGTH_SHORT).show()
+                            }
                         }
-                    }
                 }
                 Log.d("이미지", "성공")
-            }
-            else{
+            } else {
                 Log.d("이미지", "실패")
             }
         }
+
     //뷰가 생성되었을 때
     //프레그먼트와 레이아웃을 연결시켜주는 부분
     override fun onCreateView(
 
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         //view 선언을 안하고 return에 바로 적용시키면 glide가 작동을 안함
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
@@ -96,6 +101,7 @@ class ProfileFragment : Fragment() {
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
+
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userProfile = snapshot.getValue<Friend>()
                 println(userProfile)
@@ -107,13 +113,13 @@ class ProfileFragment : Fragment() {
             }
         })
         //프로필사진 바꾸기
-        photo?.setOnClickListener{
+        photo?.setOnClickListener {
             val intentImage = Intent(Intent.ACTION_PICK)
             intentImage.type = MediaStore.Images.Media.CONTENT_TYPE
             getContent.launch(intentImage)
         }
-        button?.setOnClickListener{
-            if(name?.text!!.isNotEmpty()) {
+        button?.setOnClickListener {
+            if (name?.text!!.isNotEmpty()) {
                 fireDatabase.child("users/$uid/name").setValue(name.text.toString())
                 name.clearFocus()
                 Toast.makeText(requireContext(), "이름이 변경되었습니다.", Toast.LENGTH_SHORT).show()

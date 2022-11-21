@@ -27,11 +27,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ChatFragment : Fragment() {
-    companion object{
-        fun newInstance() : ChatFragment {
+    companion object {
+        fun newInstance(): ChatFragment {
             return ChatFragment()
         }
     }
+
     private val fireDatabase = FirebaseDatabase.getInstance().reference
 
     //메모리에 올라갔을 때
@@ -46,9 +47,11 @@ class ChatFragment : Fragment() {
 
     //뷰가 생성되었을 때
     //프레그먼트와 레이아웃을 연결시켜주는 부분
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_chat, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.chatfragment_recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -60,38 +63,43 @@ class ChatFragment : Fragment() {
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder>() {
 
         private val chatModel = ArrayList<ChatModel>()
-        private var uid : String? = null
-        private val destinationUsers : ArrayList<String> = arrayListOf()
+        private var uid: String? = null
+        private val destinationUsers: ArrayList<String> = arrayListOf()
 
         init {
             uid = Firebase.auth.currentUser?.uid.toString()
             println(uid)
 
-            fireDatabase.child("chatrooms").orderByChild("users/$uid").equalTo(true).addListenerForSingleValueEvent(object : ValueEventListener{
-                override fun onCancelled(error: DatabaseError) {
-                }
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    chatModel.clear()
-                    for(data in snapshot.children){
-                        chatModel.add(data.getValue<ChatModel>()!!)
-                        println(data)
+            fireDatabase.child("chatrooms").orderByChild("users/$uid").equalTo(true)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
                     }
-                    notifyDataSetChanged()
-                }
 
-            })
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        chatModel.clear()
+                        for (data in snapshot.children) {
+                            chatModel.add(data.getValue<ChatModel>()!!)
+                            println(data)
+                        }
+                        notifyDataSetChanged()
+                    }
+
+                })
 
         }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
 
 
-            return CustomViewHolder(LayoutInflater.from(context).inflate(R.layout.item_chat, parent, false))
+            return CustomViewHolder(LayoutInflater.from(context)
+                .inflate(R.layout.item_chat, parent, false))
         }
 
         inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val imageView: ImageView = itemView.findViewById(R.id.chat_item_imageview)
-            val textView_title : TextView = itemView.findViewById(R.id.chat_textview_title)
-            val textView_lastMessage : TextView = itemView.findViewById(R.id.chat_item_textview_lastmessage)
+            val textView_title: TextView = itemView.findViewById(R.id.chat_textview_title)
+            val textView_lastMessage: TextView =
+                itemView.findViewById(R.id.chat_item_textview_lastmessage)
         }
 
         override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
@@ -103,19 +111,20 @@ class ChatFragment : Fragment() {
                     destinationUsers.add(destinationUid)
                 }
             }
-            fireDatabase.child("users").child("$destinationUid").addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                }
+            fireDatabase.child("users").child("$destinationUid")
+                .addListenerForSingleValueEvent(object :
+                    ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                    }
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val friend = snapshot.getValue<Friend>()
-                    Glide.with(holder.itemView.context).load(friend?.profileImageUrl)
-                        .apply(RequestOptions().circleCrop())
-                        .into(holder.imageView)
-                    holder.textView_title.text = friend?.name
-                }
-            })
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val friend = snapshot.getValue<Friend>()
+                        Glide.with(holder.itemView.context).load(friend?.profileImageUrl)
+                            .apply(RequestOptions().circleCrop())
+                            .into(holder.imageView)
+                        holder.textView_title.text = friend?.name
+                    }
+                })
             //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가져
             val commentMap = TreeMap<String, ChatModel.Comment>(reverseOrder())
             commentMap.putAll(chatModel[position].comments)

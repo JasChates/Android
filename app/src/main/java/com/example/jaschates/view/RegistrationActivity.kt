@@ -25,19 +25,18 @@ private lateinit var auth: FirebaseAuth
 lateinit var database: DatabaseReference
 
 @Suppress("DEPRECATION")
-class RegistrationActivity: AppCompatActivity() {
+class RegistrationActivity : AppCompatActivity() {
     lateinit var binding: ActivityRegistrationBinding
-    private var imageUri : Uri? = null
+    private var imageUri: Uri? = null
 
     //이미지 등록
     private val getContent =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            if(result.resultCode == RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 imageUri = result.data?.data //이미지 경로 원본
                 findViewById<ImageView>(R.id.registration_iv).setImageURI(imageUri) //이미지 뷰를 바꿈
                 Log.d("이미지", "성공")
-            }
-            else{
+            } else {
                 Log.d("이미지", "실패")
             }
         }
@@ -55,7 +54,7 @@ class RegistrationActivity: AppCompatActivity() {
         val profile = binding.registrationIv
         var profileCheck = false
 
-        profile.setOnClickListener{
+        profile.setOnClickListener {
             val intentImage = Intent(Intent.ACTION_PICK)
             intentImage.type = MediaStore.Images.Media.CONTENT_TYPE
             getContent.launch(intentImage)
@@ -65,15 +64,13 @@ class RegistrationActivity: AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
 
         button.setOnClickListener {
-            if(email.isEmpty() && password.isEmpty() && name.isEmpty() && profileCheck)  {
+            if (email.isEmpty() && password.isEmpty() && name.isEmpty() && profileCheck) {
                 Toast.makeText(this, "아이디와 비밀번호, 프로필 사진을 제대로 입력해주세요.", Toast.LENGTH_SHORT).show()
                 Log.d("Email", "$email, $password")
-            }
-
-            else{
-                if(!profileCheck){
+            } else {
+                if (!profileCheck) {
                     Toast.makeText(this, "프로필사진을 등록해주세요.", Toast.LENGTH_SHORT).show()
-                } else{
+                } else {
                     auth.createUserWithEmailAndPassword(email.toString(), password.toString())
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
@@ -82,14 +79,20 @@ class RegistrationActivity: AppCompatActivity() {
                                 val userIdSt = userId.toString()
 
                                 FirebaseStorage.getInstance()
-                                    .reference.child("userImages").child("$userIdSt/photo").putFile(imageUri!!).addOnSuccessListener {
+                                    .reference.child("userImages").child("$userIdSt/photo")
+                                    .putFile(imageUri!!).addOnSuccessListener {
                                         var userProfile: Uri? = null
-                                        FirebaseStorage.getInstance().reference.child("userImages").child("$userIdSt/photo").downloadUrl
+                                        FirebaseStorage.getInstance().reference.child("userImages")
+                                            .child("$userIdSt/photo").downloadUrl
                                             .addOnSuccessListener {
                                                 userProfile = it
                                                 Log.d("이미지 URL", "$userProfile")
-                                                val friend = Friend(email.toString(), name.toString(), userProfile.toString(), userIdSt)
-                                                database.child("users").child(userId.toString()).setValue(friend)
+                                                val friend = Friend(email.toString(),
+                                                    name.toString(),
+                                                    userProfile.toString(),
+                                                    userIdSt)
+                                                database.child("users").child(userId.toString())
+                                                    .setValue(friend)
                                             }
                                     }
                                 Toast.makeText(this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
@@ -108,7 +111,7 @@ class RegistrationActivity: AppCompatActivity() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-        if(currentUser != null){
+        if (currentUser != null) {
             reload();
         }
     }

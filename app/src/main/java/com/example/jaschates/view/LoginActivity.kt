@@ -15,7 +15,7 @@ import com.google.firebase.ktx.Firebase
 
 private lateinit var auth: FirebaseAuth
 
-class LoginActivity: AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
 
@@ -29,14 +29,13 @@ class LoginActivity: AppCompatActivity() {
 
         val btn_login = binding.profileButton
 
-        btn_login.setOnClickListener{
-            if(email.text.isEmpty() && password.text.isEmpty()) {
+        btn_login.setOnClickListener {
+            if (email.text.isEmpty() && password.text.isEmpty()) {
                 Toast.makeText(this, "아이디와 비밀번호를 제대로 입력해주세요.", Toast.LENGTH_SHORT).show()
                 Log.d("Email", "$email, $password")
                 email.setText("")
                 password.setText("")
-            }
-            else{
+            } else {
                 signIn(email.text.toString(), password.text.toString())
             }
         }
@@ -48,6 +47,7 @@ class LoginActivity: AppCompatActivity() {
             startActivity(intent)
         }
     }
+
     private fun signIn(email: String, password: String) {
         // [START sign_in_with_email]
         val intentList = Intent(this, MainActivity::class.java)
@@ -78,7 +78,7 @@ class LoginActivity: AppCompatActivity() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
-        if(currentUser != null){
+        if (currentUser != null) {
             reload();
         }
     }
