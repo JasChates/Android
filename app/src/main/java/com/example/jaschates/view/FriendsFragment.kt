@@ -54,7 +54,7 @@ class FriendsFragment : Fragment() {
     ): View? {
 
         database = Firebase.database.reference
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_friends, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.home_recycler)
         //this는 액티비티에서 사용가능, 프래그먼트는 requireContext()로 context 가져오기
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
