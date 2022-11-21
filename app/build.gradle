@@ -41,6 +41,9 @@ android {
     dataBinding {
         enabled = true
     }
+    viewBinding {
+        enabled = true
+    }
     configurations {
         implementation.exclude module: 'protobuf-java'
     }
