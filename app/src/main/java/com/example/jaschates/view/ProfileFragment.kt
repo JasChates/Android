@@ -1,5 +1,6 @@
 package com.example.jaschates.view
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.jaschates.R
 import com.example.jaschates.data.Friend
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -124,6 +126,12 @@ class ProfileFragment : Fragment() {
                 name.clearFocus()
                 Toast.makeText(requireContext(), "이름이 변경되었습니다.", Toast.LENGTH_SHORT).show()
             }
+        }
+        // 로그아웃
+        logout_button?.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(Activity(), LoginActivity::class.java)
+            startActivity(intent)
         }
         return view
     }

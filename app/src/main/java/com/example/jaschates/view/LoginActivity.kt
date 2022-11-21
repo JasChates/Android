@@ -78,8 +78,16 @@ class LoginActivity : AppCompatActivity() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
+        moveMainPage(auth?.currentUser)
         if (currentUser != null) {
             reload();
+        }
+    }
+
+    fun moveMainPage(user: FirebaseUser?){
+        if (user != null){
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 
