@@ -37,15 +37,15 @@ class RandomChatRecyclerAdapter(private val list: List<ChatRoomModel>, private v
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder?.bind(list[position], position)
+        holder.bind(list[position], position)
     }
 
     override fun getItemCount(): Int = list.size
 
     inner class ViewHolder(private val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatRoomModel, position: Int) {
-            binding?.chatTextviewTitle?.text = item?.title
-            binding?.chatItemTextviewLastmessage?.text = commentList[position]?.message
+            binding.chatTextviewTitle.text = item.title
+            binding.chatItemTextviewLastmessage.text = commentList[position].message
             Glide
                 .with(context)
                 .load(item.titleImage)
