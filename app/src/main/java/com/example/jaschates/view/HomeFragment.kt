@@ -35,8 +35,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment() {
-    companion object{
-        fun newInstance() : HomeFragment {
+    companion object {
+        fun newInstance(): HomeFragment {
             return HomeFragment()
         }
     }
@@ -46,15 +46,14 @@ class HomeFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             val dialog = Dialog(requireContext())
             dialog.setContentView(R.layout.dialog_create_random_chatting)
-            if(result.resultCode == RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data
                 if (uri != null) {
 //                    dialog.findViewById<ImageView>(R.id.title_image).setImageURI(null)
                     dialog.findViewById<ImageView>(R.id.title_image).setImageURI(uri) //이미지 뷰를 바꿈
                     Log.d("이미지", "성공")
                 }
-            }
-            else Log.d("이미지", "실패")
+            } else Log.d("이미지", "실패")
         }
 
     private lateinit var binding: FragmentHomeBinding
@@ -68,7 +67,8 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?)
+        savedInstanceState: Bundle?,
+    )
             : View {
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
@@ -101,15 +101,16 @@ class HomeFragment : Fragment() {
 
             chatRoomModel.user["host"] = auth.uid.toString()
             chatRoomModel.user["member"] = ""
-            database.child("randomChat").child(auth.uid.toString()).setValue(chatRoomModel).addOnSuccessListener {
-                // recycler view 생성
-                createRecyclerView()
+            database.child("randomChat").child(auth.uid.toString()).setValue(chatRoomModel)
+                .addOnSuccessListener {
+                    // recycler view 생성
+                    createRecyclerView()
 
 //                    database.child("randomChat").child(auth.uid.toString()).child("comment").push()
-                dialog.dismiss()
-                val intent = Intent(context, RandomChatActivity::class.java)
-                startActivity(intent)
-            }
+                    dialog.dismiss()
+                    val intent = Intent(context, RandomChatActivity::class.java)
+                    startActivity(intent)
+                }
         }
         createRecyclerView()
 
@@ -121,8 +122,8 @@ class HomeFragment : Fragment() {
     private fun createRecyclerView() {
         database.child("randomChat").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val chatRoomModel : ArrayList<ChatRoomModel> = arrayListOf()
-                for (snapshot in snapshot.children){
+                val chatRoomModel: ArrayList<ChatRoomModel> = arrayListOf()
+                for (snapshot in snapshot.children) {
                     val item = snapshot.getValue(ChatRoomModel::class.java)
                     chatRoomModel.add(item!!)
                 }
@@ -142,12 +143,11 @@ class HomeFragment : Fragment() {
         var imageUri: Uri?
         val getContent =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if(result.resultCode == RESULT_OK) {
+                if (result.resultCode == RESULT_OK) {
                     imageUri = result.data?.data //이미지 경로 원본
                     dialogBinding.titleImage.setImageURI(imageUri)  //이미지 뷰를 바꿈
                     Log.d("이미지", "성공")
-                }
-                else{
+                } else {
                     Log.d("이미지", "실패")
                 }
             }
