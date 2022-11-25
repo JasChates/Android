@@ -112,8 +112,8 @@ class LoginActivity : AppCompatActivity() {
         // 로그아웃을 함 -> false
     }
 
-    private fun moveMainPage(user: FirebaseUser?){
-        if (user != null){
+    private fun moveMainPage(user: FirebaseUser?) {
+        if (user != null) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
