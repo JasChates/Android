@@ -18,10 +18,11 @@
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/dalseohealingbold"
-            android:text="친구"
+            android:text="@string/friend"
             android:textColor="@color/black"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
