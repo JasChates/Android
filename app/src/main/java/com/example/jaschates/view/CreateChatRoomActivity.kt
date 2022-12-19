@@ -58,23 +58,21 @@ class CreateChatRoomActivity : AppCompatActivity() {
         binding.createChattingRoom.setOnClickListener {
             val chatRoomModel = ChatRoomModel()
             if (binding.chattingTitleEditText.text.isNotEmpty() && binding.descriptionChattingRoomEditText.text.isNotEmpty()) {
-                chatRoomModel.title = binding.chattingTitleEditText.text.toString()
-                chatRoomModel.description = binding.descriptionChattingRoomEditText.text.toString()
-                chatRoomModel.user["host"] = auth.uid.toString()
-                chatRoomModel.user["member"] = ""
                 val ref = FirebaseStorage.getInstance().reference.child("chatRoomImage").child(auth.uid.toString())
                 ref.downloadUrl.addOnSuccessListener { uri ->
+                    // 데이터 삽입
+                    chatRoomModel.title = binding.chattingTitleEditText.text.toString()
+                    chatRoomModel.description = binding.descriptionChattingRoomEditText.text.toString()
+                    chatRoomModel.user["host"] = auth.uid.toString()
+                    chatRoomModel.user["member"] = ""
                     chatRoomModel.titleImage = uri.toString()
-                    Log.d("이미지", "onCreate: $uri")
-                    Log.d("TAG", "onCreate: $chatRoomModel")
-                }
 
-                Log.d("TAG", "onCreate: $chatRoomModel")
-                database.reference.child("randomChat").child(auth.uid.toString()).setValue(chatRoomModel)
-                    .addOnSuccessListener {
-                        val intent = Intent(this, RandomChatActivity::class.java)
-                        startActivity(intent)
-                    }
+                    database.reference.child("randomChat").child(auth.uid.toString()).setValue(chatRoomModel)
+                        .addOnSuccessListener {
+                            val intent = Intent(this, RandomChatActivity::class.java)
+                            startActivity(intent)
+                        }
+                }
             } else Toast.makeText(this, "필수 항목입니다.", Toast.LENGTH_SHORT).show()
         }
     }
