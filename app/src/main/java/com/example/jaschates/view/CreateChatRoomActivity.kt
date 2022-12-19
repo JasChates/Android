@@ -75,6 +75,8 @@ class CreateChatRoomActivity : AppCompatActivity() {
                 }
             } else Toast.makeText(this, "필수 항목입니다.", Toast.LENGTH_SHORT).show()
         }
+
+        binding.cancelCreate.setOnClickListener { finish() }
     }
 
     private fun galleryLogic() {
