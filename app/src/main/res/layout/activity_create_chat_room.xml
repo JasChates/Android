@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,8 +14,7 @@
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:src="@drawable/addimage"
-            tools:ignore="ContentDescription" />
+            android:src="@drawable/addimage" />
 
         <LinearLayout
             android:id="@+id/chat_info_layout"
@@ -35,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/dalseohealingbold"
-                android:text="@string/name_input"
+                android:text="이름: "
                 android:textSize="25sp" />
 
             <EditText
@@ -44,10 +43,9 @@
                 android:layout_height="60dp"
                 android:background="@color/white"
                 android:fontFamily="@font/dalseohealingbold"
-                android:hint="@string/chatroom_name"
+                android:hint="채팅방 이름"
                 android:maxLines="1"
-                android:textSize="22sp"
-                tools:ignore="Autofill,TextFields" />
+                android:textSize="22sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -65,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/greenyellow"
                 android:fontFamily="@font/dalseohealingbold"
-                android:text="@string/produce" />
+                android:text="생성" />
 
             <View
                 android:layout_width="0dp"
@@ -78,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/greenyellow"
                 android:fontFamily="@font/dalseohealingbold"
-                android:text="@string/cancellation" />
+                android:text="취소" />
         </LinearLayout>
     </LinearLayout>
 </layout>

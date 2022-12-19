@@ -1,10 +1,11 @@
 package com.example.jaschates.data
 
 data class ChatRoomModel(
-    val user: HashMap<String, Any> = HashMap(),
-    val title: String? = null,
-    val titleImage: String? = null,
-    val comments: HashMap<String, Comment> = HashMap(),
+    var user: HashMap<String, Any> = HashMap(),
+    var title: String? = null,
+    var titleImage: String? = null,
+    var description: String? = null,
+    var comments: HashMap<String, Comment> = HashMap()
 ) {
     class Comment(val uid: String? = null, val message: String? = null, val time: String? = null)
 }

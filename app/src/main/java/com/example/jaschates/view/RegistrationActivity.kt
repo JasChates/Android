@@ -22,7 +22,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 
 private lateinit var auth: FirebaseAuth
-lateinit var database: DatabaseReference
+private lateinit var database: DatabaseReference
 
 @Suppress("DEPRECATION")
 class RegistrationActivity : AppCompatActivity() {
@@ -81,7 +81,7 @@ class RegistrationActivity : AppCompatActivity() {
                                 FirebaseStorage.getInstance()
                                     .reference.child("userImages").child("$userIdSt/photo")
                                     .putFile(imageUri!!).addOnSuccessListener {
-                                        var userProfile: Uri? = null
+                                        var userProfile: Uri?
                                         FirebaseStorage.getInstance().reference.child("userImages")
                                             .child("$userIdSt/photo").downloadUrl
                                             .addOnSuccessListener {
