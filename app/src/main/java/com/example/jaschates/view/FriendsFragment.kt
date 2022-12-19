@@ -88,7 +88,7 @@ class FriendsFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
             return CustomViewHolder(LayoutInflater.from(context)
-                .inflate(R.layout.item_home, parent, false))
+                .inflate(R.layout.item_friends, parent, false))
         }
 
         inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
