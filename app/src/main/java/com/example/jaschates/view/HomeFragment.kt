@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
 
                 val adapter = RandomChatRecyclerAdapter(chatRoomModel, requireContext())
                 binding.homeRecycler.adapter = adapter
-                binding.homeRecycler.layoutManager = LinearLayoutManager(context)
+                binding.homeRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             }
 
             override fun onCancelled(error: DatabaseError) {}
