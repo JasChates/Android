@@ -34,7 +34,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class RandomChatActivity : AppCompatActivity() {
-
     private val fireDatabase = FirebaseDatabase.getInstance().reference
     private var chatRoomUid: String? = null
     private var destinationUid: String? = null
