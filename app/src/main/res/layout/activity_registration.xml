@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +17,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_jaschates" />
+            app:srcCompat="@drawable/ic_jaschates"
+            tools:ignore="ContentDescription" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,7 +35,8 @@
                 android:src="@drawable/email"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/et_registration_id_layout"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_registration_id_layout"
@@ -53,11 +56,12 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:fontFamily="@font/dalseohealingbold"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:textColor="#000000"
                     android:textColorHint="#888888"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    tools:ignore="Autofill" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
@@ -68,7 +72,8 @@
                 android:src="@drawable/addimage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:layout_width="40dp"
@@ -77,7 +82,8 @@
                 android:src="@drawable/password"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/et_registration_password_layout"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_registration_password_layout"
@@ -99,11 +105,12 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:fontFamily="@font/dalseohealingbold"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:textColor="#000000"
                     android:textColorHint="#888888"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    tools:ignore="Autofill" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
@@ -117,7 +124,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="50dp"
                 android:fontFamily="@font/dalseohealingbold"
-                android:text="Sign Up"
+                android:text="@string/sign_up"
                 android:textColor="#000000"
                 app:backgroundTint="@color/yellow"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -132,7 +139,8 @@
                 android:src="@drawable/name"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/et_registration_name_layout"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_registration_name_layout"
@@ -151,10 +159,11 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:fontFamily="@font/dalseohealingbold"
-                    android:hint="Name"
+                    android:hint="@string/name"
                     android:textColor="#000000"
                     android:textColorHint="#888888"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    tools:ignore="Autofill,TextFields" />
             </com.google.android.material.textfield.TextInputLayout>
 
 

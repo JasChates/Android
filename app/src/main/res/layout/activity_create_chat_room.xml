@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
         <ImageView
@@ -14,15 +13,17 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:src="@drawable/addimage" />
 
         <LinearLayout
             android:id="@+id/chat_info_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
             android:orientation="horizontal"
-            android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_image">
@@ -37,43 +38,12 @@
                 android:textSize="25sp" />
 
             <EditText
-                android:id="@+id/chatting_title_edit_text"
+                android:id="@+id/chatting_room_edit_text"
                 android:layout_width="230dp"
                 android:layout_height="60dp"
                 android:background="@color/white"
                 android:fontFamily="@font/dalseohealingbold"
                 android:hint="채팅방 이름"
-                android:maxLines="1"
-                android:textSize="22sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/description_info_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_image">
-
-            <TextView
-                android:id="@+id/description_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:fontFamily="@font/dalseohealingbold"
-                android:text="설명: "
-                android:textSize="25sp" />
-
-            <EditText
-                android:id="@+id/description_chatting_room_edit_text"
-                android:layout_width="230dp"
-                android:layout_height="60dp"
-                android:background="@color/white"
-                android:fontFamily="@font/dalseohealingbold"
-                android:hint="채팅방 설명"
                 android:maxLines="1"
                 android:textSize="22sp" />
         </LinearLayout>

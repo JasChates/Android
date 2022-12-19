@@ -2,4 +2,27 @@
     <string name="app_name">JasChates</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="friend_name">친구 이름</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_maintain">로그인 유지</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="opponent_name">상대 이름</string>
+    <string name="name">Name</string>
+    <string name="name_input">이름:</string>
+    <string name="chatroom_name">채팅방 이름</string>
+    <string name="produce">생성</string>
+    <string name="cancellation">취소</string>
+    <string name="friend">친구</string>
+    <string name="open_chatroom">열린 채팅방</string>
+    <string name="textview">TextView</string>
+    <string name="change">Change</string>
+    <string name="logout">Logout</string>
+    <string name="last_message">마지막 메세지</string>
+    <string name="name_kor">이름</string>
+    <string name="email_kor">이메일</string>
+    <string name="message">메세지</string>
+    <string name="time">시간</string>
+    <string name="chat">채팅</string>
 </resources>
