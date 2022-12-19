@@ -57,9 +57,8 @@ class CreateChatRoomActivity : AppCompatActivity() {
 
         binding.createChattingRoom.setOnClickListener {
             val chatRoomModel = ChatRoomModel()
-            if (binding.chattingTitleEditText.text.isNotEmpty() && binding.descriptionChattingRoomEditText.text.isNotEmpty()) {
-                chatRoomModel.title = binding.chattingTitleEditText.text.toString()
-                chatRoomModel.description = binding.descriptionChattingRoomEditText.text.toString()
+            if (binding.chattingRoomEditText.text.isNotEmpty()) {
+                chatRoomModel.title = binding.chattingRoomEditText.text.toString()
                 chatRoomModel.user["host"] = auth.uid.toString()
                 chatRoomModel.user["member"] = ""
                 val ref = FirebaseStorage.getInstance().reference.child("chatRoomImage").child(auth.uid.toString())
