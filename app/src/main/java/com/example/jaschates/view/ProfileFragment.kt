@@ -70,6 +70,7 @@ class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
 
+
     //뷰가 생성되었을 때
     //프레그먼트와 레이아웃을 연결시켜주는 부분
     override fun onCreateView(
@@ -99,14 +100,18 @@ class ProfileFragment : Fragment() {
         //프로필사진 바꾸기
         binding.profileImageview.setOnClickListener {
             val intentImage = Intent(Intent.ACTION_PICK)
+
             intentImage.type = MediaStore.Images.Media.CONTENT_TYPE
             getContent.launch(intentImage)
         }
+
         binding.profileButton.setOnClickListener {
             if (binding.profileTextviewName.text!!.isNotEmpty()) {
-                fireDatabase.child("users/$uid/name").setValue(name.text.toString())
+                fireDatabase.child("users/$uid/name").setValue(binding.profileTextviewName.text.toString())
                 binding.profileTextviewName.clearFocus()
                 Toast.makeText(requireContext(), "이름이 변경되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
         // 로그아웃
