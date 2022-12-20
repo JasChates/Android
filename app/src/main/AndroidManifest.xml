@@ -22,13 +22,7 @@
         android:theme="@style/Theme.JasChates"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".view.CreateChatRoomActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+        <activity android:name=".view.CreateChatRoomActivity" />
         <activity android:name=".view.RandomChatActivity" />
         <activity android:name=".view.MainActivity" />
         <activity android:name=".view.MessageActivity" />

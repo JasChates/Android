@@ -1,6 +1,7 @@
 package com.example.jaschates.view
 
 import android.annotation.SuppressLint
+import android.app.LauncherActivity.ListItem
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import com.example.jaschates.R
 import com.example.jaschates.adapter.RandomChatRecyclerAdapter
 import com.example.jaschates.data.ChatRoomModel
@@ -26,6 +28,7 @@ class HomeFragment : Fragment() {
         fun newInstance(): HomeFragment {
             return HomeFragment()
         }
+
     }
 
     private lateinit var binding: FragmentHomeBinding
@@ -38,7 +41,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
@@ -48,7 +51,6 @@ class HomeFragment : Fragment() {
             startActivity(Intent(context, CreateChatRoomActivity::class.java))
         }
         createRecyclerView()
-
         return binding.root
     }
 
@@ -63,10 +65,20 @@ class HomeFragment : Fragment() {
 
                 val adapter = RandomChatRecyclerAdapter(chatRoomModel, requireContext())
                 binding.homeRecycler.adapter = adapter
-                binding.homeRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                binding.homeRecycler.layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+                adapter.setItemClickListener(object: RandomChatRecyclerAdapter.OnItemClickListener{
+                    override fun onClick(v: View, position: Int) {
+                        val intent = Intent(context, RandomChatActivity::class.java)
+                        startActivity(intent)
+                    }
+                })
             }
 
+
             override fun onCancelled(error: DatabaseError) {}
+
 
         })
     }
