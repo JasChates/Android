@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.jaschates.R
 import com.example.jaschates.data.ChatModel
+import com.example.jaschates.data.ChatRoomModel
 import com.example.jaschates.data.Friend
+import com.example.jaschates.databinding.ActivityRandomChatBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -34,6 +37,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class RandomChatActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRandomChatBinding
     private val fireDatabase = FirebaseDatabase.getInstance().reference
     private var chatRoomUid: String? = null
     private var destinationUid: String? = null
@@ -43,9 +47,14 @@ class RandomChatActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_random_chat)
-        val imageView = findViewById<ImageView>(R.id.messageActivity_ImageView)
-        val editText = findViewById<TextView>(R.id.messageActivity_editText)
+
+        binding = ActivityRandomChatBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val sendImage = binding.send
+        val chatEditText = binding.chat
+        val chatRoom = intent.getSerializableExtra("chatRoom") as ChatRoomModel
+
+        binding.chatRoomName.text = chatRoom.title
 
         //메세지를 보낸 시간
         val time = System.currentTimeMillis()
@@ -54,18 +63,17 @@ class RandomChatActivity : AppCompatActivity() {
 
         destinationUid = intent.getStringExtra("destinationUid")
         uid = Firebase.auth.currentUser?.uid.toString()
-        recyclerView = findViewById(R.id.messageActivity_recyclerview)
+        recyclerView = binding.messageActivityRecyclerview
 
-        imageView.setOnClickListener {
-            Log.d("클릭 시 dest", "$destinationUid")
+        sendImage.setOnClickListener {
             val chatModel = ChatModel()
             chatModel.users[uid.toString()] = true
             chatModel.users[destinationUid!!] = true
 
-            val comment = ChatModel.Comment(uid, editText.text.toString(), curTime)
-            if (messageActivity_editText.text.isNotEmpty()) {
+            val comment = ChatModel.Comment(uid, chatEditText.text.toString(), curTime)
+            if (chat.text.isNotEmpty()) {
                 if (chatRoomUid == null) {
-                    imageView.isEnabled = false
+                    sendImage.isEnabled = false
                     fireDatabase.child("chatrooms").push().setValue(chatModel)
                         .addOnSuccessListener {
                             //채팅방 생성
@@ -74,21 +82,37 @@ class RandomChatActivity : AppCompatActivity() {
                             Handler().postDelayed({
                                 fireDatabase.child("chatrooms").child(chatRoomUid.toString())
                                     .child("comments").push().setValue(comment)
-                                messageActivity_editText.text = null
+                                chat.text = null
                             }, 1000L)
                             Log.d("chatUidNull dest", "$destinationUid")
                         }
                 } else {
                     fireDatabase.child("chatrooms").child(chatRoomUid.toString()).child("comments")
                         .push().setValue(comment)
-                    messageActivity_editText.text = null
+                    chat.text = null
                     Log.d("chatUidNotNull dest", "$destinationUid")
                 }
-            } else Log.d("TAG", "onCreate: messageActivity_editText lenght is 0")
+            } else Log.d("TAG", "onCreate: messageActivity_editText length is 0")
         }
         checkChatRoom()
 
-        call_image.setOnClickListener {
+        binding.outImage.setOnClickListener {
+            if (chatRoom.user["host"] == uid) { // 나가는 사람이 호스트 일때
+                val reference = FirebaseDatabase.getInstance().reference.child("randomChat").child(uid!!)
+                reference.removeValue().addOnSuccessListener {
+                    Toast.makeText(this, "채팅방을 나갔습니다.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            } else {
+                val reference = FirebaseDatabase.getInstance().reference.child("randomChat").child(chatRoom.user["host"].toString())
+                    .child("user").child("member")
+                reference.setValue("").addOnSuccessListener {
+                    Toast.makeText(this, "채팅방을 나갔습니다.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+        }
+        binding.callImage.setOnClickListener {
             val channelNumber = (1000..1000000).random().toString()
 
             showJoinDialog(channelNumber)
@@ -120,7 +144,7 @@ class RandomChatActivity : AppCompatActivity() {
                         val chatModel = item.getValue<ChatModel>()
                         if (chatModel?.users!!.containsKey(destinationUid)) {
                             chatRoomUid = item.key
-                            messageActivity_ImageView.isEnabled = true
+                            send.isEnabled = true
                             recyclerView?.layoutManager =
                                 LinearLayoutManager(this@RandomChatActivity)
                             recyclerView?.adapter = RecyclerViewAdapter()
@@ -130,8 +154,7 @@ class RandomChatActivity : AppCompatActivity() {
             })
     }
 
-    inner class RecyclerViewAdapter :
-        RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
+    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
         private val comments = ArrayList<ChatModel.Comment>()
         private var friend: Friend? = null
@@ -144,7 +167,7 @@ class RandomChatActivity : AppCompatActivity() {
 
                     override fun onDataChange(snapshot: DataSnapshot) {
                         friend = snapshot.getValue<Friend>()
-                        messageActivity_textView_topName.text = friend?.name
+                        chat_room_name.text = friend?.name
                         getMessageList()
                     }
                 })

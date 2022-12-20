@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.app.LauncherActivity.ListItem
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -70,8 +73,20 @@ class HomeFragment : Fragment() {
 
                 adapter.setItemClickListener(object: RandomChatRecyclerAdapter.OnItemClickListener{
                     override fun onClick(v: View, position: Int) {
-                        val intent = Intent(context, RandomChatActivity::class.java)
-                        startActivity(intent)
+                        // 채팅방 입장
+                        val chatRoom = chatRoomModel[position]
+                        val reference = FirebaseDatabase.getInstance().getReference("randomChat").child(chatRoom.user["host"].toString())
+                            .child("user").child("member")
+
+                        reference.setValue(auth.currentUser?.uid.toString()).addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(context, "채팅방에 입장했습니다.", Toast.LENGTH_SHORT).show()
+
+                                val intent = Intent(context, RandomChatActivity::class.java)
+                                intent.putExtra("chatRoom", chatRoomModel[position])
+                                startActivity(intent)
+                            }
+                        }
                     }
                 })
             }

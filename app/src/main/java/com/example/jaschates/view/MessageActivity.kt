@@ -45,8 +45,8 @@ class MessageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
-        val imageView = findViewById<ImageView>(R.id.messageActivity_ImageView)
-        val editText = findViewById<TextView>(R.id.messageActivity_editText)
+        val imageView = findViewById<ImageView>(R.id.send)
+        val editText = findViewById<TextView>(R.id.chat)
 
         //메세지를 보낸 시간
         val time = System.currentTimeMillis()
@@ -64,7 +64,7 @@ class MessageActivity : AppCompatActivity() {
             chatModel.users[destinationUid!!] = true
 
             val comment = ChatModel.Comment(uid, editText.text.toString(), curTime)
-            if (messageActivity_editText.text.isNotEmpty()) {
+            if (chat.text.isNotEmpty()) {
                 if (chatRoomUid == null) {
                     imageView.isEnabled = false
                     fireDatabase.child("chatrooms").push().setValue(chatModel)
@@ -75,14 +75,14 @@ class MessageActivity : AppCompatActivity() {
                             Handler().postDelayed({
                                 fireDatabase.child("chatrooms").child(chatRoomUid.toString())
                                     .child("comments").push().setValue(comment)
-                                messageActivity_editText.text = null
+                                chat.text = null
                             }, 1000L)
                             Log.d("chatUidNull dest", "$destinationUid")
                         }
                 } else {
                     fireDatabase.child("chatrooms").child(chatRoomUid.toString()).child("comments")
                         .push().setValue(comment)
-                    messageActivity_editText.text = null
+                    chat.text = null
                     Log.d("chatUidNotNull dest", "$destinationUid")
                 }
             } else Log.d("TAG", "onCreate: messageActivity_editText lenght is 0")
@@ -121,7 +121,7 @@ class MessageActivity : AppCompatActivity() {
                         val chatModel = item.getValue<ChatModel>()
                         if (chatModel?.users!!.containsKey(destinationUid)) {
                             chatRoomUid = item.key
-                            messageActivity_ImageView.isEnabled = true
+                            send.isEnabled = true
                             recyclerView?.layoutManager = LinearLayoutManager(this@MessageActivity)
                             recyclerView?.adapter = RecyclerViewAdapter()
                         }
@@ -144,7 +144,7 @@ class MessageActivity : AppCompatActivity() {
 
                     override fun onDataChange(snapshot: DataSnapshot) {
                         friend = snapshot.getValue<Friend>()
-                        messageActivity_textView_topName.text = friend?.name
+                        chat_room_name.text = friend?.name
                         getMessageList()
                     }
                 })
