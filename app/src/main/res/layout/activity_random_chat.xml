@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/messageActivity_textView_topName"
+                android:id="@+id/chat_room_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -43,6 +43,14 @@
                 android:layout_marginEnd="15dp"
                 android:src="@drawable/call"
                 tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/out_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_baseline_exit_to_app_24"/>
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +80,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <EditText
-                android:id="@+id/messageActivity_editText"
+                android:id="@+id/chat"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
@@ -82,13 +90,13 @@
                 android:layout_marginRight="55dp"
                 android:fontFamily="@font/dalseohealingbold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/messageActivity_ImageView"
+                app:layout_constraintEnd_toStartOf="@+id/send"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="Autofill,LabelFor,RtlHardcoded,TextFields" />
 
             <ImageView
-                android:id="@+id/messageActivity_ImageView"
+                android:id="@+id/send"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/send"
