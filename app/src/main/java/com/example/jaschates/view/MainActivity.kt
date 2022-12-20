@@ -9,7 +9,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 private lateinit var homeFragment: HomeFragment
 private lateinit var friendsFragment: FriendsFragment
-private lateinit var chatFragment: ChatFragment
 private lateinit var profileFragment: ProfileFragment
 
 @Suppress("DEPRECATION")
@@ -39,11 +38,6 @@ class MainActivity : AppCompatActivity() {
                     friendsFragment = FriendsFragment.newInstance()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragments_frame, friendsFragment).commit()
-                }
-                R.id.menu_chat -> {
-                    chatFragment = ChatFragment.newInstance()
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragments_frame, chatFragment).commit()
                 }
                 R.id.menu_profile -> {
                     profileFragment = ProfileFragment.newInstance()
