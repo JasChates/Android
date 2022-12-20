@@ -2,6 +2,7 @@ package com.example.jaschates.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -38,9 +39,24 @@ class RandomChatRecyclerAdapter(private val list: List<ChatRoomModel>, private v
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
+        holder.itemView.setOnClickListener {
+            itemClickListener.onClick(it, position)
+        }
     }
 
+    interface OnItemClickListener{
+        fun onClick(v: View, position: Int)
+    }
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener){
+        this.itemClickListener = onItemClickListener
+    }
+
+    private lateinit var itemClickListener : OnItemClickListener
+
     override fun getItemCount(): Int = list.size
+
+
 
     inner class ViewHolder(private val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatRoomModel) {
@@ -53,3 +69,4 @@ class RandomChatRecyclerAdapter(private val list: List<ChatRoomModel>, private v
         }
     }
 }
+

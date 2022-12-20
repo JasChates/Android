@@ -23,7 +23,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
                 android:fontFamily="@font/dalseohealingbold"
-                android:text="@string/opponent_name"
+                android:text="@string/chatroom_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/black"
                 android:textSize="24sp"

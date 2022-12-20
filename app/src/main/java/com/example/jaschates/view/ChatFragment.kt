@@ -98,8 +98,7 @@ class ChatFragment : Fragment() {
         inner class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val imageView: ImageView = itemView.findViewById(R.id.chat_item_imageview)
             val textView_title: TextView = itemView.findViewById(R.id.chat_textview_title)
-            val textView_lastMessage: TextView =
-                itemView.findViewById(R.id.chat_item_textview_lastmessage)
+            val textView_lastMessage: TextView = itemView.findViewById(R.id.chat_item_textview_lastmessage)
         }
 
         override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
@@ -125,13 +124,13 @@ class ChatFragment : Fragment() {
                         holder.textView_title.text = friend?.name
                     }
                 })
-            //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가져
+            //메세지 내림차순 정렬 후 마지막 메세지의 키값을 가짐
             val commentMap = TreeMap<String, ChatModel.Comment>(reverseOrder())
             commentMap.putAll(chatModel[position].comments)
             val lastMessageKey = commentMap.keys.toTypedArray()[0]
             holder.textView_lastMessage.text = chatModel[position].comments[lastMessageKey]?.message
 
-            //채팅창 선책 시 이동
+            //채팅창 선택 시 이동
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, MessageActivity::class.java)
                 intent.putExtra("destinationUid", destinationUsers[position])
