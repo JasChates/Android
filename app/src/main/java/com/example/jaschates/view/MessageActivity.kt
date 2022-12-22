@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+// 친구와의 채팅
 class MessageActivity : AppCompatActivity() {
 
     private val fireDatabase = FirebaseDatabase.getInstance().reference
@@ -119,6 +120,7 @@ class MessageActivity : AppCompatActivity() {
                     for (item in snapshot.children) {
                         println(item)
                         val chatModel = item.getValue<ChatModel>()
+                        Log.d("TAG", "onDataChange: $destinationUid")
                         if (chatModel?.users!!.containsKey(destinationUid)) {
                             chatRoomUid = item.key
                             send.isEnabled = true
@@ -171,8 +173,7 @@ class MessageActivity : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
-            val view: View =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_message, parent, false)
+            val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_message, parent, false)
 
             return MessageViewHolder(view)
         }
