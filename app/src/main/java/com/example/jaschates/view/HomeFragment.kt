@@ -1,10 +1,8 @@
 package com.example.jaschates.view
 
 import android.annotation.SuppressLint
-import android.app.LauncherActivity.ListItem
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import com.example.jaschates.R
 import com.example.jaschates.adapter.RandomChatRecyclerAdapter
 import com.example.jaschates.data.ChatRoomModel
@@ -68,8 +65,7 @@ class HomeFragment : Fragment() {
 
                 val adapter = RandomChatRecyclerAdapter(chatRoomModel, requireContext())
                 binding.homeRecycler.adapter = adapter
-                binding.homeRecycler.layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                binding.homeRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
                 adapter.setItemClickListener(object: RandomChatRecyclerAdapter.OnItemClickListener{
                     override fun onClick(v: View, position: Int) {
@@ -84,6 +80,7 @@ class HomeFragment : Fragment() {
 
                                 val intent = Intent(context, RandomChatActivity::class.java)
                                 intent.putExtra("chatRoom", chatRoomModel[position])
+                                intent.putExtra("hostUid", chatRoomModel[position].user["host"].toString())
                                 startActivity(intent)
                             }
                         }

@@ -70,7 +70,9 @@ class CreateChatRoomActivity : AppCompatActivity() {
                     database.reference.child("randomChat").child(auth.uid.toString()).setValue(chatRoomModel)
                         .addOnSuccessListener {
                             val intent = Intent(this, RandomChatActivity::class.java)
+                            intent.putExtra("chatRoom", chatRoomModel)
                             startActivity(intent)
+                            finish()
                         }
                 }
             } else Toast.makeText(this, "필수 항목입니다.", Toast.LENGTH_SHORT).show()
