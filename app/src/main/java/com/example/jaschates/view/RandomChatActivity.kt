@@ -23,7 +23,6 @@ import com.example.jaschates.R
 import com.example.jaschates.data.ChatRoomModel
 import com.example.jaschates.data.Friend
 import com.example.jaschates.databinding.ActivityRandomChatBinding
-import com.example.jaschates.databinding.ItemMessageBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -106,7 +105,6 @@ class RandomChatActivity : AppCompatActivity() {
         }
         binding.callImage.setOnClickListener {
             val channelNumber = (1000..1000000).random().toString()
-
             showJoinDialog(channelNumber)
         }
     }
@@ -138,7 +136,6 @@ class RandomChatActivity : AppCompatActivity() {
                         }
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {}
             })
     }
@@ -219,5 +216,6 @@ class RandomChatActivity : AppCompatActivity() {
         override fun getItemCount(): Int {
             return comments.size
         }
+
     }
 }
