@@ -9,6 +9,7 @@ import com.example.jaschates.R
 import com.example.jaschates.databinding.ActivityVideoCallBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.remotemonster.sdk.RemonCall
+import com.remotemonster.sdk.RemonCast
 
 class VideoCallActivity : AppCompatActivity() {
     lateinit var binding: ActivityVideoCallBinding
@@ -19,11 +20,9 @@ class VideoCallActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
-        FirebaseFirestore.setLoggingEnabled(true)
-
         remonCall = RemonCall.builder()
             .context(this)
-            .serviceId("SERVICED1")
+            .serviceId("SERVICEID1")
             .key("1234567890")
             .videoCodec("VP8")
             .videoWidth(640)
