@@ -23,6 +23,7 @@ import com.example.jaschates.R
 import com.example.jaschates.data.ChatRoomModel
 import com.example.jaschates.data.Friend
 import com.example.jaschates.databinding.ActivityRandomChatBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -105,8 +106,11 @@ class RandomChatActivity : AppCompatActivity() {
         }
         binding.callImage.setOnClickListener {
             val channelNumber = (1000..1000000).random().toString()
-            showJoinDialog("channelNumber")
+//            showJoinDialog(channelNumber)
+            createChatRoomID(channelNumber, chatRoomModel)
         }
+
+        watchingMyUidVideoRequest()
     }
 
     fun showJoinDialog(channel: String) {
@@ -120,6 +124,23 @@ class RandomChatActivity : AppCompatActivity() {
             dialogInterface.dismiss()
         }
         builder.create().show()
+    }
+
+    private fun createChatRoomID(channel: String, chatRoomModel: ChatRoomModel) {
+        fireDatabase.child("randomChat").child(chatRoomModel.user["host"].toString()).child("channelID").setValue(channel)
+    }
+
+    private fun watchingMyUidVideoRequest() {
+        fireDatabase.child("randomChat").child(hostUid).addValueEventListener(object :ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val chatRoomModel = snapshot.getValue(ChatRoomModel::class.java)
+                if (chatRoomModel?.channelID != null) {
+                    showJoinDialog(chatRoomModel.channelID!!)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun checkChatRoom() {
