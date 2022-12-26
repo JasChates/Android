@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.jaschates.R
 import com.example.jaschates.databinding.ActivityVideoCallBinding
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.remotemonster.sdk.RemonCall
 import com.remotemonster.sdk.RemonCast
@@ -35,6 +36,8 @@ class VideoCallActivity : AppCompatActivity() {
         remonCall?.connect(channelId)
         remonCall?.onClose {
             // 상대방이 화상통화를 종료할 경우
+            FirebaseDatabase.getInstance().reference.child("randomChat").child(intent.getStringExtra("hostId").toString())
+                .child("channelID").setValue(null)
             Toast.makeText(this, "상대방이 나가서 통화가 종료되었습니다.", Toast.LENGTH_SHORT).show()
             finish()
         }

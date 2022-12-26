@@ -118,7 +118,8 @@ class RandomChatActivity : AppCompatActivity() {
         builder.setMessage("${channel} 방에 참여하시겠습니까?")
         builder.setPositiveButton("Yes") { dialogInterface, i ->
             startActivity(Intent(this, VideoCallActivity::class.java)
-                .putExtra("channelId", channel))
+                .putExtra("channelId", channel)
+                .putExtra("hostId", hostUid))
         }
         builder.setNegativeButton("No") { dialogInterface, i ->
             dialogInterface.dismiss()
