@@ -26,7 +26,7 @@ class VideoCallActivity : AppCompatActivity() {
             .key("1234567890")
             .videoCodec("VP8")
             .videoWidth(640)
-            .videoHeight(400)
+            .videoHeight(480)
             .localView(binding.localView)
             .remoteView(binding.remoteView)
             .build()
