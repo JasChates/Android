@@ -66,6 +66,7 @@ class CreateChatRoomActivity : AppCompatActivity() {
                     chatRoomModel.user["host"] = auth.uid.toString()
                     chatRoomModel.user["member"] = ""
                     chatRoomModel.titleImage = uri.toString()
+                    chatRoomModel.channelID = null
 
                     database.reference.child("randomChat").child(auth.uid.toString()).setValue(chatRoomModel)
                         .addOnSuccessListener {

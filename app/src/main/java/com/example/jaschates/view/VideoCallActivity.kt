@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.jaschates.R
 import com.example.jaschates.databinding.ActivityVideoCallBinding
@@ -32,10 +33,11 @@ class VideoCallActivity : AppCompatActivity() {
             .build()
         val channelId = intent.getStringExtra("channelId")
         remonCall?.connect(channelId)
-//        remonCall?.onClose {
-//            // 상대방이 화상통화를 종료할 경우
-//            finish()
-//        }
+        remonCall?.onClose {
+            // 상대방이 화상통화를 종료할 경우
+            Toast.makeText(this, "상대방이 나가서 통화가 종료되었습니다.", Toast.LENGTH_SHORT).show()
+            finish()
+        }
     }
 
     override fun onDestroy() {
