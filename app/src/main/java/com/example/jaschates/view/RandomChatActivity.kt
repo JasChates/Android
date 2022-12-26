@@ -105,7 +105,7 @@ class RandomChatActivity : AppCompatActivity() {
         }
         binding.callImage.setOnClickListener {
             val channelNumber = (1000..1000000).random().toString()
-            showJoinDialog(channelNumber)
+            showJoinDialog("channelNumber")
         }
     }
 
@@ -185,7 +185,7 @@ class RandomChatActivity : AppCompatActivity() {
             holder.textView_message.textSize = 20F
             holder.textView_message.text = comments[position].message
             holder.textView_time.text = comments[position].time
-            if (comments[position].uid.equals(uid)) { // 본인 채팅
+            if (comments[position].uid.equals(destinationUid)) { // 본인 채팅
                 holder.textView_message.setBackgroundResource(R.drawable.rightbubble)
                 holder.textView_name.visibility = View.INVISIBLE
                 holder.layout_destination.visibility = View.INVISIBLE
