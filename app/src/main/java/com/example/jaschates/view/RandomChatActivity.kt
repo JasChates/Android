@@ -106,7 +106,7 @@ class RandomChatActivity : AppCompatActivity() {
         }
         binding.callImage.setOnClickListener {
             val channelNumber = (1000..1000000).random().toString()
-//            showJoinDialog(channelNumber)
+            showJoinDialog(chatRoomModel.channelID!!)
             createChatRoomID(channelNumber, chatRoomModel)
         }
 
@@ -136,7 +136,7 @@ class RandomChatActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val chatRoomModel = snapshot.getValue(ChatRoomModel::class.java)
                 if (chatRoomModel?.channelID != null) {
-                    showJoinDialog(chatRoomModel.channelID!!)
+                    // showJoinDialog(chatRoomModel.channelID!!)
                 }
             }
 
