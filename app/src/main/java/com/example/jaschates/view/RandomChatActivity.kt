@@ -15,20 +15,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.jaschates.R
 import com.example.jaschates.data.ChatRoomModel
-import com.example.jaschates.data.Friend
+import com.example.jaschates.data.User
 import com.example.jaschates.databinding.ActivityRandomChatBinding
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_message.*
@@ -42,7 +39,10 @@ class RandomChatActivity : AppCompatActivity() {
     private lateinit var destinationUid: String
     private lateinit var uid: String
     private lateinit var hostUid: String
+    private lateinit var memberUid: String
     private lateinit var recyclerView: RecyclerView
+    private lateinit var chatRoomModel: ChatRoomModel
+    lateinit var a: String
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +52,7 @@ class RandomChatActivity : AppCompatActivity() {
         setContentView(binding.root)
         val sendImage = binding.sendImage
         val chatEditText = binding.randomChat
-        val chatRoomModel = intent.getSerializableExtra("chatRoom") as ChatRoomModel
+        chatRoomModel = intent.getSerializableExtra("chatRoom") as ChatRoomModel
 
         binding.randomChatRoomName.text = chatRoomModel.title
 
@@ -61,11 +61,14 @@ class RandomChatActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm")
         val curTime = dateFormat.format(Date(time)).toString()
 
-        hostUid = intent.getStringExtra("hostUid").toString()
+        hostUid = chatRoomModel.user["host"].toString()
         uid = Firebase.auth.currentUser?.uid.toString()
+        getMember()
+        memberUid = binding.memberId.text.toString()
+        Log.d("TAG", "onCreate: ${intent.getStringExtra("uid").toString()}")
+        destinationUid = if (chatRoomModel.user["host"] == uid) a
+        else hostUid
         recyclerView = binding.randomChatActivityRecyclerview
-        destinationUid = if (chatRoomModel.user["host"] == uid) uid
-        else chatRoomModel.user["member"].toString()
 
         sendImage.setOnClickListener {
             val comment = ChatRoomModel.Comment(uid, chatEditText.text.toString(), curTime)
@@ -89,20 +92,7 @@ class RandomChatActivity : AppCompatActivity() {
         checkChatRoom()
 
         binding.outImage.setOnClickListener {
-            if (chatRoomModel.user["host"] == uid) { // 나가는 사람이 호스트 일때
-                val reference = FirebaseDatabase.getInstance().reference.child("randomChat").child(uid!!)
-                reference.removeValue().addOnSuccessListener {
-                    Toast.makeText(this, "채팅방을 나갔습니다.", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-            } else {
-                val reference = FirebaseDatabase.getInstance().reference.child("randomChat").child(chatRoomModel.user["host"].toString())
-                    .child("user").child("member")
-                reference.setValue("").addOnSuccessListener {
-                    Toast.makeText(this, "채팅방을 나갔습니다.", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-            }
+            outLogic()
         }
         binding.callImage.setOnClickListener {
             val channelNumber = (1000..1000000).random().toString()
@@ -110,6 +100,48 @@ class RandomChatActivity : AppCompatActivity() {
         }
 
         watchingMyUidVideoRequest()
+    }
+
+    private fun outLogic() {
+        if (chatRoomModel.user["host"] == uid) { // 나가는 사람이 호스트 일때
+            val reference = FirebaseDatabase.getInstance().reference.child("randomChat").child(uid!!)
+            reference.removeValue().addOnSuccessListener {
+                Toast.makeText(this, "채팅방을 나갔습니다.", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        } else {
+            val reference = FirebaseDatabase.getInstance().reference.child("randomChat").child(chatRoomModel.user["host"].toString())
+                .child("user").child("member")
+            reference.setValue("").addOnSuccessListener {
+                Toast.makeText(this, "채팅방을 나갔습니다.", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    }
+
+    private fun getMember() {
+        fireDatabase.child("randomChat").child(hostUid).child("user")
+            .addChildEventListener(object :ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    Log.d("TAG", "onChildAdded: child added")
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    Log.d("TAG", "onChildAdded child changed: ${snapshot.value as String}")
+
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    Log.d("TAG", "onChildAdded: child removed")
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    Log.d("TAG", "onChildAdded: child moved")
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+
+            })
     }
 
     fun showJoinDialog(channel: String) {
@@ -163,7 +195,7 @@ class RandomChatActivity : AppCompatActivity() {
 
     inner class RandomChatAdapter : RecyclerView.Adapter<RandomChatAdapter.CommentViewHolder>() {
         private val comments = ArrayList<ChatRoomModel.Comment>()
-        private var friend: Friend? = null  // 유저 정보를 불러오기 위함
+        private var friend: User? = null  // 유저 정보를 불러오기 위함
 
         init {
             fireDatabase.child("users").child(destinationUid)
@@ -171,7 +203,7 @@ class RandomChatActivity : AppCompatActivity() {
                     override fun onCancelled(error: DatabaseError) {}
 
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        friend = snapshot.getValue<Friend>()
+                        friend = snapshot.getValue<User>()
                         getMessageList()
                     }
                 })
@@ -206,7 +238,7 @@ class RandomChatActivity : AppCompatActivity() {
             holder.textView_message.textSize = 20F
             holder.textView_message.text = comments[position].message
             holder.textView_time.text = comments[position].time
-            if (comments[position].uid.equals(destinationUid)) { // 본인 채팅
+            if (comments[position].uid.equals(uid)) { // 본인 채팅
                 holder.textView_message.setBackgroundResource(R.drawable.rightbubble)
                 holder.textView_name.visibility = View.INVISIBLE
                 holder.layout_destination.visibility = View.INVISIBLE
@@ -237,6 +269,10 @@ class RandomChatActivity : AppCompatActivity() {
         override fun getItemCount(): Int {
             return comments.size
         }
+    }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        outLogic()
     }
 }

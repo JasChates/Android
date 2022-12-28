@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
                     chatRoomModel.add(item!!)
                 }
 
-                val adapter = RandomChatRecyclerAdapter(chatRoomModel, requireContext())
+                val adapter = RandomChatRecyclerAdapter(chatRoomModel, context!!)
                 binding.homeRecycler.adapter = adapter
                 binding.homeRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
 
                                 val intent = Intent(context, RandomChatActivity::class.java)
                                 intent.putExtra("chatRoom", chatRoomModel[position])
-                                intent.putExtra("hostUid", chatRoomModel[position].user["host"].toString())
+                                intent.putExtra("uid", auth.currentUser?.uid)
                                 startActivity(intent)
                             }
                         }

@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.jaschates.R
 import com.example.jaschates.data.ChatModel
-import com.example.jaschates.data.Friend
+import com.example.jaschates.data.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -78,13 +78,11 @@ class MessageActivity : AppCompatActivity() {
                                     .child("comments").push().setValue(comment)
                                 chat.text = null
                             }, 1000L)
-                            Log.d("chatUidNull dest", "$destinationUid")
                         }
                 } else {
                     fireDatabase.child("chatrooms").child(chatRoomUid.toString()).child("comments")
                         .push().setValue(comment)
                     chat.text = null
-                    Log.d("chatUidNotNull dest", "$destinationUid")
                 }
             } else Log.d("TAG", "onCreate: messageActivity_editText lenght is 0")
         }
@@ -136,7 +134,7 @@ class MessageActivity : AppCompatActivity() {
         RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
         private val comments = ArrayList<ChatModel.Comment>()
-        private var friend: Friend? = null
+        private var user: User? = null
 
         init {
             fireDatabase.child("users").child(destinationUid.toString())
@@ -145,8 +143,8 @@ class MessageActivity : AppCompatActivity() {
                     }
 
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        friend = snapshot.getValue<Friend>()
-                        chat_room_name.text = friend?.name
+                        user = snapshot.getValue<User>()
+                        chat_room_name.text = user?.name
                         getMessageList()
                     }
                 })
@@ -190,10 +188,10 @@ class MessageActivity : AppCompatActivity() {
                 holder.layout_main.gravity = Gravity.RIGHT
             } else { // 상대방 채팅
                 Glide.with(holder.itemView.context)
-                    .load(friend?.profileImageUrl)
+                    .load(user?.profileImageUrl)
                     .apply(RequestOptions().circleCrop())
                     .into(holder.imageView_profile)
-                holder.textView_name.text = friend?.name
+                holder.textView_name.text = user?.name
                 holder.layout_destination.visibility = View.VISIBLE
                 holder.textView_name.visibility = View.VISIBLE
                 holder.textView_message.setBackgroundResource(R.drawable.leftbubble)

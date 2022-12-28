@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.jaschates.data.Friend
+import com.example.jaschates.data.User
 import com.example.jaschates.databinding.FragmentProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -26,7 +26,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.activity_create_chat_room.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
@@ -88,7 +87,7 @@ class ProfileFragment : Fragment() {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val userProfile = snapshot.getValue<Friend>()
+                val userProfile = snapshot.getValue<User>()
                 println(userProfile)
                 Glide.with(requireContext()).load(userProfile?.profileImageUrl)
                     .apply(RequestOptions().circleCrop())

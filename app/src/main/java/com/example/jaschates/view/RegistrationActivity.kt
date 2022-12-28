@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.jaschates.R
-import com.example.jaschates.data.Friend
+import com.example.jaschates.data.User
 import com.example.jaschates.databinding.ActivityRegistrationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -87,12 +87,12 @@ class RegistrationActivity : AppCompatActivity() {
                                             .addOnSuccessListener {
                                                 userProfile = it
                                                 Log.d("이미지 URL", "$userProfile")
-                                                val friend = Friend(email.toString(),
+                                                val user = User(email.toString(),
                                                     name.toString(),
                                                     userProfile.toString(),
                                                     userIdSt)
                                                 database.child("users").child(userId.toString())
-                                                    .setValue(friend)
+                                                    .setValue(user)
                                             }
                                     }
                                 Toast.makeText(this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
