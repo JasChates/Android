@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jaschates.R
-import com.example.jaschates.data.Friend
+import com.example.jaschates.data.User
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.ktx.auth
@@ -31,7 +31,7 @@ class FriendsFragment : Fragment() {
     }
 
     private lateinit var database: DatabaseReference
-    private var friend: ArrayList<Friend> = arrayListOf()
+    private var user: ArrayList<User> = arrayListOf()
 
     //메모리에 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,13 +73,13 @@ class FriendsFragment : Fragment() {
                     }
 
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        friend.clear()
+                        user.clear()
                         for (data in snapshot.children) {
-                            val item = data.getValue<Friend>()
+                            val item = data.getValue<User>()
                             if (item?.uid.equals(myUid)) {
                                 continue
                             } // 본인은 친구창에서 제외
-                            friend.add(item!!)
+                            user.add(item!!)
                         }
                         notifyDataSetChanged()
                     }
@@ -98,21 +98,21 @@ class FriendsFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-            Glide.with(holder.itemView.context).load(friend[position].profileImageUrl)
+            Glide.with(holder.itemView.context).load(user[position].profileImageUrl)
                 .apply(RequestOptions().circleCrop())
                 .into(holder.imageView)
-            holder.textView.text = friend[position].name
-            holder.textViewEmail.text = friend[position].email
+            holder.textView.text = user[position].name
+            holder.textViewEmail.text = user[position].email
 
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, MessageActivity::class.java)
-                intent.putExtra("destinationUid", friend[position].uid)
+                intent.putExtra("destinationUid", user[position].uid)
                 context?.startActivity(intent)
             }
         }
 
         override fun getItemCount(): Int {
-            return friend.size
+            return user.size
         }
     }
 }
