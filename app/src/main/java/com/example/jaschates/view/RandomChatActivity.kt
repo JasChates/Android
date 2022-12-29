@@ -136,7 +136,7 @@ class RandomChatActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val chatRoomModel = snapshot.getValue(ChatRoomModel::class.java)
                 if (chatRoomModel?.channelID != null) {
-                     showJoinDialog(chatRoomModel.channelID!!)
+                    showJoinDialog(chatRoomModel.channelID!!)
                 }
             }
 
