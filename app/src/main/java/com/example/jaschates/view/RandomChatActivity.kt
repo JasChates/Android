@@ -2,6 +2,7 @@ package com.example.jaschates.view
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +25,7 @@ import com.example.jaschates.R
 import com.example.jaschates.data.ChatRoomModel
 import com.example.jaschates.data.User
 import com.example.jaschates.databinding.ActivityRandomChatBinding
+import com.example.jaschates.filter.BadWordFiltering
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -42,6 +45,7 @@ class RandomChatActivity : AppCompatActivity() {
     private lateinit var memberUid: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var chatRoomModel: ChatRoomModel
+    private val a = BadWordFiltering()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -234,10 +238,11 @@ class RandomChatActivity : AppCompatActivity() {
             return CommentViewHolder(view)
         }
 
+        @RequiresApi(Build.VERSION_CODES.N)
         @SuppressLint("RtlHardcoded")
         override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
             holder.textView_message.textSize = 20F
-            holder.textView_message.text = comments[position].message
+            holder.textView_message.text = a.checkAndChange(comments[position].message.toString())
             holder.textView_time.text = comments[position].time
             if (comments[position].uid.equals(uid)) { // 본인 채팅
                 holder.textView_message.setBackgroundResource(R.drawable.rightbubble)
@@ -256,6 +261,7 @@ class RandomChatActivity : AppCompatActivity() {
                 holder.layout_main.gravity = Gravity.LEFT
 
                 holder.itemView.setOnClickListener {
+
                     val friendHash = HashMap<String, Boolean>()
                     if (hostUid == uid) {
                         friendHash[member?.uid.toString()] = false
@@ -280,6 +286,20 @@ class RandomChatActivity : AppCompatActivity() {
         override fun getItemCount(): Int {
             return comments.size
         }
+    }
+
+    fun sendFriendRequest(channel: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("${channel} 방에 참여하시겠습니까?")
+        builder.setPositiveButton("Yes") { dialogInterface, i ->
+            startActivity(Intent(this, VideoCallActivity::class.java)
+                .putExtra("channelId", channel)
+                .putExtra("hostId", hostUid))
+        }
+        builder.setNegativeButton("No") { dialogInterface, i ->
+            dialogInterface.dismiss()
+        }
+        builder.create().show()
     }
 
     override fun onBackPressed() {
