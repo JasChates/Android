@@ -17,10 +17,6 @@ class BadWordFiltering : BadWords, AddRemove {
         this.substituteValue = substituteValue!!
     }
 
-
-    @SuppressLint("NotConstructor")
-    fun BadWordFiltering() {}
-
     //특정 문자 추가, 삭제
     override fun add(vararg texts: String?) {
         set.addAll(java.util.List.of(*texts))
