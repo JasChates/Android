@@ -261,14 +261,7 @@ class RandomChatActivity : AppCompatActivity() {
                 holder.layout_main.gravity = Gravity.LEFT
 
                 holder.itemView.setOnClickListener {
-
-                    val friendHash = HashMap<String, Boolean>()
-                    if (hostUid == uid) {
-                        friendHash[member?.uid.toString()] = false
-                    } else {
-                        friendHash[hostUid] = false
-                    }
-                    fireDatabase.child("friend").child(FirebaseAuth.getInstance().currentUser?.uid.toString()).setValue(friendHash)
+                    sendFriendRequest(member)
                 }
             }
         }
@@ -288,13 +281,19 @@ class RandomChatActivity : AppCompatActivity() {
         }
     }
 
-    fun sendFriendRequest(channel: String) {
+    fun sendFriendRequest(member: User?) {
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("${channel} 방에 참여하시겠습니까?")
+        builder.setMessage("${member?.name}님에게 친구요청을 보내시겠습니까?")
         builder.setPositiveButton("Yes") { dialogInterface, i ->
-            startActivity(Intent(this, VideoCallActivity::class.java)
-                .putExtra("channelId", channel)
-                .putExtra("hostId", hostUid))
+            val friendHash = HashMap<String, Boolean>()
+            friendHash[uid] = false
+            if (hostUid == uid) {   // 호스트 -> 멤버
+                fireDatabase.child("friend").child(member?.uid.toString()).child(uid).setValue(friendHash)
+            } else {    // 멤버 -> 호스트
+                fireDatabase.child("friend").child(hostUid).child(uid).setValue(friendHash)
+            }
+            Toast.makeText(this, "친구 요청을 보냈습니다.", Toast.LENGTH_SHORT).show()
+            dialogInterface.dismiss()
         }
         builder.setNegativeButton("No") { dialogInterface, i ->
             dialogInterface.dismiss()
