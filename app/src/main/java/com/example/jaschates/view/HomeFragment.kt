@@ -3,6 +3,7 @@ package com.example.jaschates.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,9 +58,13 @@ class HomeFragment : Fragment() {
         database.child("randomChat").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val chatRoomModel: ArrayList<ChatRoomModel> = arrayListOf()
-                for (snapshot in snapshot.children) {
-                    val item = snapshot.getValue(ChatRoomModel::class.java)
-                    chatRoomModel.add(item!!)
+                for (dataSnapshot in snapshot.children) {
+                    val item = dataSnapshot.getValue(ChatRoomModel::class.java)
+                    if (item!!.user["host"].toString().isNotEmpty() && item.user["member"].toString().isNotEmpty()) {
+                        Log.d("TAG", "onDataChange: if")
+                        continue
+                    }
+                    chatRoomModel.add(item)
                 }
 
                 val adapter = RandomChatRecyclerAdapter(chatRoomModel, context!!)
