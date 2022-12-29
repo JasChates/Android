@@ -1,9 +1,9 @@
 package com.example.jaschates.view
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +19,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
 
@@ -33,17 +32,6 @@ class FriendsFragment : Fragment() {
     private lateinit var database: DatabaseReference
     private var user: ArrayList<User> = arrayListOf()
 
-    //메모리에 올라갔을 때
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    //프레그먼트를 포함하고 있는 액티비티에 붙었을 때
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     //뷰가 생성되었을 때
     //프레그먼트와 레이아웃을 연결시켜주는 부분
     @SuppressLint("UseRequireInsteadOfGet")
@@ -53,7 +41,7 @@ class FriendsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
 
-        database = Firebase.database.reference
+        database = FirebaseDatabase.getInstance().reference
         val view = inflater.inflate(R.layout.fragment_friends, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.home_recycler)
         //this는 액티비티에서 사용가능, 프래그먼트는 requireContext()로 context 가져오기
@@ -65,9 +53,9 @@ class FriendsFragment : Fragment() {
 
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.CustomViewHolder>() {
 
+        val myUid = Firebase.auth.currentUser?.uid.toString()   // 내 uid
         init {
-            val myUid = Firebase.auth.currentUser?.uid.toString()
-            FirebaseDatabase.getInstance().reference.child("users")
+            /*FirebaseDatabase.getInstance().reference.child("users")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                     }
@@ -83,7 +71,32 @@ class FriendsFragment : Fragment() {
                         }
                         notifyDataSetChanged()
                     }
-                })
+                })*/
+            database.child("friendList").child(myUid).addListenerForSingleValueEvent(object :ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (dataSnapShot in snapshot.children) {
+                        getUser(dataSnapShot)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        }
+
+        private fun getUser(dataSnapShot: DataSnapshot) {
+            database.child("users").child(dataSnapShot.key.toString()).addListenerForSingleValueEvent(object :ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val item = snapshot.getValue(User::class.java)
+                    Log.d("TAG", "onDataChange item: ${snapshot.value}")
+                    if (item?.uid.equals(myUid)) {
+                        return
+                    }
+                    user.add(item!!)
+                    notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {

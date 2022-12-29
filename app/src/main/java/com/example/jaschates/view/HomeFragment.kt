@@ -28,7 +28,6 @@ class HomeFragment : Fragment() {
         fun newInstance(): HomeFragment {
             return HomeFragment()
         }
-
     }
 
     private lateinit var binding: FragmentHomeBinding
