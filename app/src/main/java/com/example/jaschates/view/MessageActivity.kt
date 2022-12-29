@@ -89,23 +89,8 @@ class MessageActivity : AppCompatActivity() {
         checkChatRoom()
 
         call_image.setOnClickListener {
-            val channelNumber = (1000..1000000).random().toString()
-
-            showJoinDialog(channelNumber)
+            finish()
         }
-    }
-
-    fun showJoinDialog(channel: String) {
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage("${channel} 방에 참여하시겠습니까?")
-        builder.setPositiveButton("Yes") { dialogInterface, i ->
-            startActivity(Intent(this, VideoCallActivity::class.java)
-                .putExtra("channelId", channel))
-        }
-        builder.setNegativeButton("No") { dialogInterface, i ->
-            dialogInterface.dismiss()
-        }
-        builder.create().show()
     }
 
     private fun checkChatRoom() {
@@ -130,8 +115,7 @@ class MessageActivity : AppCompatActivity() {
             })
     }
 
-    inner class RecyclerViewAdapter :
-        RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
+    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MessageViewHolder>() {
 
         private val comments = ArrayList<ChatModel.Comment>()
         private var user: User? = null

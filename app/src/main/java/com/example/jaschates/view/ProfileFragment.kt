@@ -104,6 +104,10 @@ class ProfileFragment : Fragment() {
             getContent.launch(intentImage)
         }
 
+        binding.friendRequestImage.setOnClickListener {
+            startActivity(Intent(context, FriendRequestActivity::class.java))
+        }
+
         binding.profileButton.setOnClickListener {
             if (binding.profileTextviewName.text!!.isNotEmpty()) {
                 fireDatabase.child("users/$uid/name").setValue(binding.profileTextviewName.text.toString())
