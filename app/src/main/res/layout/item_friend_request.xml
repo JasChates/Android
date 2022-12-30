@@ -40,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dalseohealingbold"
+            android:textSize="10sp"
             android:text="이메일" />
     </LinearLayout>
 
@@ -61,6 +62,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/yellow"
             android:text="수락"
+            android:fontFamily="@font/dalseohealingbold"
             android:textColor="@color/black"
             android:layout_marginBottom="5dp" />
 
@@ -69,6 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="거절"
+            android:fontFamily="@font/dalseohealingbold"
             android:textColor="@color/black"
             android:backgroundTint="@color/yellow"/>
     </LinearLayout>
