@@ -88,7 +88,7 @@ class MessageActivity : AppCompatActivity() {
         }
         checkChatRoom()
 
-        call_image.setOnClickListener {
+        exit_image.setOnClickListener {
             finish()
         }
     }
