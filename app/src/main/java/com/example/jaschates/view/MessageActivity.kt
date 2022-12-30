@@ -1,8 +1,6 @@
 package com.example.jaschates.view
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,6 +19,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.jaschates.R
 import com.example.jaschates.data.ChatModel
 import com.example.jaschates.data.User
+import com.example.jaschates.databinding.ActivityMessageBinding
+import com.example.jaschates.filter.BadWordFiltering
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,7 +31,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_message.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 // 친구와의 채팅
 class MessageActivity : AppCompatActivity() {
@@ -41,13 +40,17 @@ class MessageActivity : AppCompatActivity() {
     private var destinationUid: String? = null
     private var uid: String? = null
     private var recyclerView: RecyclerView? = null
+    private lateinit var binding: ActivityMessageBinding
+    private val badWordFiltering = BadWordFiltering()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_message)
-        val imageView = findViewById<ImageView>(R.id.send)
-        val editText = findViewById<TextView>(R.id.chat)
+
+        binding = ActivityMessageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val imageView = binding.send
+        val chat = binding.chat
 
         //메세지를 보낸 시간
         val time = System.currentTimeMillis()
@@ -56,7 +59,9 @@ class MessageActivity : AppCompatActivity() {
 
         destinationUid = intent.getStringExtra("destinationUid")
         uid = Firebase.auth.currentUser?.uid.toString()
-        recyclerView = findViewById(R.id.messageActivity_recyclerview)
+        recyclerView = binding.messageActivityRecyclerview
+
+        binding.chatRoomName.text = intent.getStringExtra("name")
 
         imageView.setOnClickListener {
             Log.d("클릭 시 dest", "$destinationUid")
@@ -64,7 +69,7 @@ class MessageActivity : AppCompatActivity() {
             chatModel.users[uid.toString()] = true
             chatModel.users[destinationUid!!] = true
 
-            val comment = ChatModel.Comment(uid, editText.text.toString(), curTime)
+            val comment = ChatModel.Comment(uid, chat.text.toString(), curTime)
             if (chat.text.isNotEmpty()) {
                 if (chatRoomUid == null) {
                     imageView.isEnabled = false
@@ -123,12 +128,11 @@ class MessageActivity : AppCompatActivity() {
         init {
             fireDatabase.child("users").child(destinationUid.toString())
                 .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                    }
+                    override fun onCancelled(error: DatabaseError) {}
 
                     override fun onDataChange(snapshot: DataSnapshot) {
                         user = snapshot.getValue<User>()
-                        chat_room_name.text = user?.name
+                        Log.d("TAG", "onDataChange message activity: $user")
                         getMessageList()
                     }
                 })
@@ -163,7 +167,7 @@ class MessageActivity : AppCompatActivity() {
         @SuppressLint("RtlHardcoded")
         override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
             holder.textView_message.textSize = 20F
-            holder.textView_message.text = comments[position].message
+            holder.textView_message.text = badWordFiltering.checkAndChange(comments[position].message.toString())
             holder.textView_time.text = comments[position].time
             if (comments[position].uid.equals(uid)) { // 본인 채팅
                 holder.textView_message.setBackgroundResource(R.drawable.rightbubble)

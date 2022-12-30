@@ -26,7 +26,6 @@ import com.example.jaschates.data.ChatRoomModel
 import com.example.jaschates.data.User
 import com.example.jaschates.databinding.ActivityRandomChatBinding
 import com.example.jaschates.filter.BadWordFiltering
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
@@ -45,7 +44,7 @@ class RandomChatActivity : AppCompatActivity() {
     private lateinit var memberUid: String
     private lateinit var recyclerView: RecyclerView
     private lateinit var chatRoomModel: ChatRoomModel
-    private val a = BadWordFiltering()
+    private val badWordFiltering = BadWordFiltering()
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -242,7 +241,7 @@ class RandomChatActivity : AppCompatActivity() {
         @SuppressLint("RtlHardcoded")
         override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
             holder.textView_message.textSize = 20F
-            holder.textView_message.text = a.checkAndChange(comments[position].message.toString())
+            holder.textView_message.text = badWordFiltering.checkAndChange(comments[position].message.toString())
             holder.textView_time.text = comments[position].time
             if (comments[position].uid.equals(uid)) { // 본인 채팅
                 holder.textView_message.setBackgroundResource(R.drawable.rightbubble)
