@@ -55,23 +55,6 @@ class FriendsFragment : Fragment() {
 
         val myUid = Firebase.auth.currentUser?.uid.toString()   // 내 uid
         init {
-            /*FirebaseDatabase.getInstance().reference.child("users")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        user.clear()
-                        for (data in snapshot.children) {
-                            val item = data.getValue<User>()
-                            if (item?.uid.equals(myUid)) {
-                                continue
-                            } // 본인은 친구창에서 제외
-                            user.add(item!!)
-                        }
-                        notifyDataSetChanged()
-                    }
-                })*/
             database.child("friendList").child(myUid).addListenerForSingleValueEvent(object :ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (dataSnapShot in snapshot.children) {
@@ -87,7 +70,6 @@ class FriendsFragment : Fragment() {
             database.child("users").child(dataSnapShot.key.toString()).addListenerForSingleValueEvent(object :ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val item = snapshot.getValue(User::class.java)
-                    Log.d("TAG", "onDataChange item: ${snapshot.value}")
                     if (item?.uid.equals(myUid)) {
                         return
                     }
@@ -118,8 +100,10 @@ class FriendsFragment : Fragment() {
             holder.textViewEmail.text = user[position].email
 
             holder.itemView.setOnClickListener {
+                Log.d("TAG", "onBindViewHolder friend fragment: ${user[position].uid}")
                 val intent = Intent(context, MessageActivity::class.java)
                 intent.putExtra("destinationUid", user[position].uid)
+                intent.putExtra("name", user[position].name)
                 context?.startActivity(intent)
             }
         }

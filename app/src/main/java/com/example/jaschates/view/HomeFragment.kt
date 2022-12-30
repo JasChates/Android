@@ -61,7 +61,6 @@ class HomeFragment : Fragment() {
                 for (dataSnapshot in snapshot.children) {
                     val item = dataSnapshot.getValue(ChatRoomModel::class.java)
                     if (item!!.user["host"].toString().isNotEmpty() && item.user["member"].toString().isNotEmpty()) {
-                        Log.d("TAG", "onDataChange: if")
                         continue
                     }
                     chatRoomModel.add(item)

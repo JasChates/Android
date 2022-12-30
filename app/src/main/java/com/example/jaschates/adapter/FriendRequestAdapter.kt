@@ -72,6 +72,8 @@ class FriendRequestAdapter(private val auth: String, private val context: Contex
             binding.requestAcceptButton.setOnClickListener {
                 firebaseDatabase.child("friendList").child(auth).child(user.uid.toString()).child(user.uid.toString()).setValue(true)
                     .addOnSuccessListener {
+                        // 상대방에게도 적용
+                        firebaseDatabase.child("friendList").child(user.uid.toString()).child(auth).child(auth).setValue(true)
                         // 데이터 지우기
                         firebaseDatabase.child("friend").child(auth).child(user.uid.toString()).removeValue()
                         Toast.makeText(context, "친구요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
