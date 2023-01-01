@@ -37,10 +37,8 @@
         <activity android:name=".view.MainActivity" />
         <activity android:name=".view.MessageActivity" />
         <activity android:name=".view.RegistrationActivity" />
-        <activity android:name=".view.SplashActivity" />
-        <activity android:name=".view.VideoCallActivity" />
         <activity
-            android:name=".view.LoginActivity"
+            android:name=".view.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,6 +46,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.VideoCallActivity" />
+        <activity android:name=".view.LoginActivity" />
     </application>
 
 </manifest>

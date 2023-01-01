@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.jaschates.R
 import com.example.jaschates.adapter.RandomChatRecyclerAdapter
 import com.example.jaschates.data.ChatRoomModel
@@ -68,7 +69,8 @@ class HomeFragment : Fragment() {
 
                 val adapter = RandomChatRecyclerAdapter(chatRoomModel, context!!)
                 binding.homeRecycler.adapter = adapter
-                binding.homeRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//                binding.homeRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                binding.homeRecycler.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
                 adapter.setItemClickListener(object: RandomChatRecyclerAdapter.OnItemClickListener{
                     override fun onClick(v: View, position: Int) {
